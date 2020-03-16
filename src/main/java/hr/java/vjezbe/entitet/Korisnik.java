@@ -29,6 +29,10 @@ public class Korisnik {
         this.prezime = prezime;
     }
 
+    public String getImeIPrezime() {
+        return ime + " " + prezime;
+    }
+
     public String getEmail() {
         return email;
     }
