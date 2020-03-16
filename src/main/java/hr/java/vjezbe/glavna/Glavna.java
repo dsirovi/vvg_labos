@@ -51,25 +51,22 @@ public class Glavna {
     }
 
 
-
-
-
     private static void obaviObjavuAtrikala(Scanner unos, Korisnik[] korisnici, Kategorija[] kategorije, int brojOglasa) {
         Prodaja[] prodaje = new Prodaja[brojOglasa];
         for (int i = 0; i < brojOglasa; i++) {
             System.out.println("Odaberite korisnika: ");
             ispisiKorisnike(korisnici);
-            int odabirKorisnika = dohvatiOdabir(unos);
+            int odabirKorisnika = dohvatiOdabir(unos, korisnici.length);
             Korisnik odabraniKorisnik = korisnici[odabirKorisnika - 1];
 
             System.out.println("Odaberi kategoriju: ");
             ispisiKategoije(kategorije);
-            int odabirKategorije = dohvatiOdabir(unos);
+            int odabirKategorije = dohvatiOdabir(unos, kategorije.length);
             Kategorija odabranaKategorija = kategorije[odabirKategorije - 1];
 
             System.out.println("Odaberi artikl: ");
             ispisiArtikle(odabranaKategorija.getArtikli());
-            int odabirArtikla = dohvatiOdabir(unos);
+            int odabirArtikla = dohvatiOdabir(unos, odabranaKategorija.getArtikli().length);
             Artikl odabraniArtikl = odabranaKategorija.getArtikli()[odabirArtikla - 1];
 
             Prodaja prodaja = new Prodaja(odabraniArtikl, odabraniKorisnik, LocalDate.now());
@@ -96,6 +93,21 @@ public class Glavna {
             System.out.println(i + " " + artikl.getNaslov());
         }
     }
+
+    private static int dohvatiOdabir(Scanner unos, int max) {
+        int odabir;
+
+        do {
+            System.out.print("Odabir -> ");
+            odabir = unos.nextInt();
+            if (odabir < 1 || odabir > max) {
+                System.out.println("Krivi broj!!!");
+            }
+        } while (odabir < 1 || odabir > max);
+
+        return odabir;
+    }
+
 
     private static void ispisiKategoije(Kategorija[] kategorije) {
         for (int i = 1; i <= kategorije.length; i++) {
