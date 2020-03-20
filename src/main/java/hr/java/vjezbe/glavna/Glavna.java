@@ -8,6 +8,8 @@ import hr.java.vjezbe.entitet.Prodaja;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Glavna {
@@ -32,16 +34,21 @@ public class Glavna {
 
         for (int i = 0; i < brojKategorija; i++) {
             String nazivKategorije = podaciKategorije(unos, i);
-            System.out.print("Unesite broj atikala koliko zelite u kategoriji: ");
-            int brojArtikala = unos.nextInt();
+            BigDecimal donjaGranicaVrijednosti = podaciDonjeGranice(unos);
+            BigDecimal gornjaGranicaVrijednosti = podaciGornjeGranice(unos);
             unos.nextLine();
-            Artikl[] artikli = new Artikl[brojArtikala];
-            for (int j = 0; j < brojArtikala; j++) {
+            List<Artikl> artikli = new ArrayList<>();
+            BigDecimal ukupnaCijena = new BigDecimal("0");
+            int j = 0;
+           do {
                 Artikl artikl = podaciArtikla(unos, j);
-                artikli[j] = artikl;
-            }
+                ukupnaCijena = ukupnaCijena.add(artikl.getCijena());
+                artikli.add(artikl);
+                j++;
+            }while (ukupnaCijena.compareTo(donjaGranicaVrijednosti) < 0 || ukupnaCijena.compareTo(gornjaGranicaVrijednosti) > 0 );
 
-            kategorije[i] = new Kategorija(nazivKategorije, artikli);
+
+            kategorije[i] = new Kategorija(nazivKategorije, artikli, donjaGranicaVrijednosti, gornjaGranicaVrijednosti);
         }
 
         System.out.print("Unesite broj artikala koji su aktivno na prodaju: ");
@@ -70,15 +77,16 @@ public class Glavna {
             System.out.println("Odaberi artikl: ");
             ispisiArtikle(odabranaKategorija.getArtikli());
             int odabirArtikla = dohvatiOdabir(unos);
-            Artikl odabraniArtikl = odabranaKategorija.getArtikli()[odabirArtikla - 1];
+            Artikl odabraniArtikl = odabranaKategorija.getArtikli().get(odabirArtikla - 1);
 
-            Prodaja prodaja = new Prodaja(odabraniArtikl, odabraniKorisnik, LocalDate.now());
+            Prodaja prodaja = new Prodaja(odabranaKategorija, odabraniArtikl, odabraniKorisnik, LocalDate.now());
             prodaje[i] = prodaja;
         }
         DateTimeFormatter mojFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
         System.out.println("Trenutno su na prodaju: ");
         for (int i = 0; i < prodaje.length; i++) {
             Prodaja prodaja = prodaje[i];
+            Kategorija kategorija = prodaja.getKategorija();
             Artikl artikl = prodaja.getArtikl();
             Korisnik korisnik = prodaja.getKorisnik();
             System.out.println("Naslov: " + artikl.getNaslov());
@@ -86,13 +94,15 @@ public class Glavna {
             System.out.println("Cijena: " + artikl.getCijena());
             System.out.println("Datum obajve: " + prodaja.getDatumObjave().format(mojFormat));
             System.out.println("Kontakt podaci: " + korisnik.getImeIPrezime() + ", mail: " + korisnik.getEmail() + ", tel: " + korisnik.getTelefon());
+            System.out.println("Donja granica vrijednosti artikla: " + kategorija.getDonjaGranicaVrijednosti());
+            System.out.println("Gornja granica vrijednosti artikla: " + kategorija.getGornjaGranicaVrijednosti());
             System.out.println("_________________________________");
         }
     }
 
-    private static void ispisiArtikle(Artikl[] artikli) {
-        for (int i = 1; i <= artikli.length; i++) {
-            Artikl artikl = artikli[i - 1];
+    private static void ispisiArtikle(List<Artikl> artikli) {
+        for (int i = 1; i <= artikli.size(); i++) {
+            Artikl artikl = artikli.get(i - 1);
             System.out.println(i + " " + artikl.getNaslov());
         }
     }
@@ -131,6 +141,16 @@ public class Glavna {
     private static String podaciKategorije(Scanner unos, int i) {
         System.out.print("Unesite naziv " + (i + 1) + ". kategorije -> ");
         return unos.nextLine();
+    }
+
+    private static BigDecimal podaciDonjeGranice(Scanner unos) {
+        System.out.print("Unesite donju granicu vrijednosti artikla -> ");
+        return unos.nextBigDecimal();
+    }
+
+    private static BigDecimal podaciGornjeGranice(Scanner unos) {
+        System.out.print("Unesite gornju granicu vrijednosti artikla -> ");
+        return unos.nextBigDecimal();
     }
 
     private static Korisnik podaciKorisnika(Scanner unos, int i) {
