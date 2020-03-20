@@ -33,19 +33,19 @@ public class Glavna {
         Kategorija[] kategorije = new Kategorija[brojKategorija];
 
         for (int i = 0; i < brojKategorija; i++) {
-            String nazivKategorije = podaciKategorije(unos, i);
+            String nazivKategorije = podaciKategorije(unos,kategorije, i);
             BigDecimal donjaGranicaVrijednosti = podaciDonjeGranice(unos);
             BigDecimal gornjaGranicaVrijednosti = podaciGornjeGranice(unos);
             unos.nextLine();
             List<Artikl> artikli = new ArrayList<>();
             BigDecimal ukupnaCijena = new BigDecimal("0");
             int j = 0;
-           do {
+            do {
                 Artikl artikl = podaciArtikla(unos, j);
                 ukupnaCijena = ukupnaCijena.add(artikl.getCijena());
                 artikli.add(artikl);
                 j++;
-            }while (ukupnaCijena.compareTo(donjaGranicaVrijednosti) < 0 || ukupnaCijena.compareTo(gornjaGranicaVrijednosti) > 0 );
+            } while (ukupnaCijena.compareTo(donjaGranicaVrijednosti) < 0 || ukupnaCijena.compareTo(gornjaGranicaVrijednosti) > 0);
 
 
             kategorije[i] = new Kategorija(nazivKategorije, artikli, donjaGranicaVrijednosti, gornjaGranicaVrijednosti);
@@ -56,9 +56,6 @@ public class Glavna {
         unos.nextLine();
         obaviObjavuAtrikala(unos, korisnici, kategorije, brojOglasa);
     }
-
-
-
 
 
     private static void obaviObjavuAtrikala(Scanner unos, Korisnik[] korisnici, Kategorija[] kategorije, int brojOglasa) {
@@ -138,9 +135,25 @@ public class Glavna {
         return new Artikl(naslov, opis, cijena);
     }
 
-    private static String podaciKategorije(Scanner unos, int i) {
-        System.out.print("Unesite naziv " + (i + 1) + ". kategorije -> ");
-        return unos.nextLine();
+    private static String podaciKategorije(Scanner unos, Kategorija[] kategorije, int i) {
+        boolean ispravanNaziv;
+        String naziv;
+
+        do {
+            ispravanNaziv = true;
+            System.out.print("Unesite naziv " + (i + 1) + ". kategorije -> ");
+            naziv = unos.nextLine();
+
+            for (Kategorija kategorija : kategorije) {
+                if (kategorija != null && kategorija.getNaziv().equals(naziv)) {
+                    ispravanNaziv = false;
+                    System.out.println("Naziv kategorije vec postoji.");
+                    break;
+                }
+            }
+        } while(!ispravanNaziv);
+
+        return naziv;
     }
 
     private static BigDecimal podaciDonjeGranice(Scanner unos) {
