@@ -28,6 +28,6 @@ public class PoslovniKorisnik extends Korisnik {
 
     @Override
     public String dohvatiKontakt() {
-        return String.valueOf(new PoslovniKorisnik(getEmail(), getTelefon(), getNaziv(), getWeb()));
+        return String.format("Naziv: %s, email: %s, web: %s, tel: %s", naziv, getEmail(), web, getTelefon());
     }
 }

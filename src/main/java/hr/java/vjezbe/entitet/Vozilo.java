@@ -16,29 +16,29 @@ public interface Vozilo {
     BigDecimal izracunajGrupuOsiguranja();
 
     default BigDecimal izracunajCijenuOsiguranja() {
-        izracunajGrupuOsiguranja()
-        int num1;
+        BigDecimal grupa = izracunajGrupuOsiguranja();
 
-        num1 = (int) (Math.random()* 5+1);
-        switch (num1){
+        int cijena = 0;
+//        cijena = (int) (Math.random()* 5+1);
+        switch (grupa.intValue()){
             case 1:
-                BigDecimal.valueOf(num1);
+                cijena = (int) (Math.random()* 100+1);
                 break;
             case 2:
-                BigDecimal.valueOf(num1);
+                cijena = (int) (Math.random()* 200+101);
                 break;
             case 3:
-                BigDecimal.valueOf(num1);
+                cijena = (int) (Math.random()* 300+201);
                 break;
             case 4:
-                BigDecimal.valueOf(num1);
+                cijena = (int) (Math.random()* 400+301);
                 break;
             case 5:
-                BigDecimal.valueOf(num1);
+                cijena = (int) (Math.random()* 1000+401);
                 break;
         }
 
-        return ;
+        return BigDecimal.valueOf(cijena);
     }
 }
 
