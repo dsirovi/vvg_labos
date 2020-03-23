@@ -2,7 +2,7 @@ package hr.java.vjezbe.entitet;
 
 import java.math.BigDecimal;
 
-public class Artikl {
+public abstract class Artikl {
     private String naslov;
     private String opis;
     private BigDecimal cijena;
@@ -36,4 +36,6 @@ public class Artikl {
     public void setCijena(BigDecimal cijena) {
         this.cijena = cijena;
     }
+
+    public abstract String tekstOglasa();
 }
