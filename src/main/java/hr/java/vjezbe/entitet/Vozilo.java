@@ -1,18 +1,12 @@
 package hr.java.vjezbe.entitet;
 
 import java.math.BigDecimal;
-import java.util.Scanner;
 
 public interface Vozilo {
     double KILOWATTS = 0.7457;
 
-    default BigDecimal izracunajKw() {
-        Scanner unos = new Scanner(System.in);
-
-        System.out.print("Unesite snagu 1. (u ks) oglasa automobila -> ");
-        BigDecimal horsePower = unos.nextBigDecimal();
-        BigDecimal convertHptoKw = horsePower.multiply(new BigDecimal(KILOWATTS));
-        return convertHptoKw;
+    default BigDecimal izracunajKw(BigDecimal horsePower) {
+        return horsePower.multiply(new BigDecimal(KILOWATTS));
     }
 
     BigDecimal izracunajGrupuOsiguranja();

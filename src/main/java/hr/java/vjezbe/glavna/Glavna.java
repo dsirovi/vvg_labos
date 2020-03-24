@@ -21,7 +21,15 @@ public class Glavna {
 
         Korisnik[] korisnici = new Korisnik[brojKorisnika];
         for (int i = 0; i < brojKorisnika; i++) {
-            korisnici[i] = podaciKorisnika(unos, i);
+            System.out.println("Unesite tip " + (i + 1) + ". korisnika -> ");
+            tipoviKorisnika();
+            int odabraniKorisnik = dohvatiOdabir(unos);
+            unos.nextLine();
+            if (odabraniKorisnik == 1) {
+                korisnici[i] = podaciPrivatnogKorisnika(unos, i);
+            } else {
+                korisnici[i] = podaciPoslovnogKorisnika(unos, i);
+            }
         }
 
         System.out.print("Unesite broj kategorija koliko zelite imati: ");
@@ -37,8 +45,18 @@ public class Glavna {
             unos.nextLine();
             Artikl[] artikli = new Artikl[brojArtikala];
             for (int j = 0; j < brojArtikala; j++) {
-                Artikl artikl = podaciArtikla(unos, j);
-                artikli[j] = artikl;
+                System.out.println("Unesite tip " + (j + 1) + ". oglasa");
+                tipoviOglasa();
+                int odabraniOglas = dohvatiOdabir(unos);
+                unos.nextLine();
+                if (odabraniOglas == 1){
+                    Artikl artikl = podaciArtiklaUsluge(unos, j);
+                    artikli[j] = artikl;
+                }else{
+                    Artikl artikl = podaciArtiklaAutomobila(unos, j);
+                    artikli[j] = artikl;
+                }
+
             }
 
             kategorije[i] = new Kategorija(nazivKategorije, artikli);
@@ -49,9 +67,6 @@ public class Glavna {
         unos.nextLine();
         obaviObjavuAtrikala(unos, korisnici, kategorije, brojOglasa);
     }
-
-
-
 
 
     private static void obaviObjavuAtrikala(Scanner unos, Korisnik[] korisnici, Kategorija[] kategorije, int brojOglasa) {
@@ -77,16 +92,14 @@ public class Glavna {
         }
         DateTimeFormatter mojFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
         System.out.println("Trenutno su na prodaju: ");
-        for (int i = 0; i < prodaje.length; i++) {
-            Prodaja prodaja = prodaje[i];
+        System.out.println("_____________________________________________");
+        for (Prodaja prodaja : prodaje) {
             Artikl artikl = prodaja.getArtikl();
             Korisnik korisnik = prodaja.getKorisnik();
-            System.out.println("Naslov: " + artikl.getNaslov());
-            System.out.println("Opis: " + artikl.getOpis());
-            System.out.println("Cijena: " + artikl.getCijena());
+            System.out.println(artikl.tekstOglasa());
             System.out.println("Datum obajve: " + prodaja.getDatumObjave().format(mojFormat));
-            System.out.println("Kontakt podaci: " + korisnik.getImeIPrezime() + ", mail: " + korisnik.getEmail() + ", tel: " + korisnik.getTelefon());
-            System.out.println("_________________________________");
+            System.out.println(korisnik.dohvatiKontakt());
+            System.out.println("_____________________________________________");
         }
     }
 
@@ -107,7 +120,7 @@ public class Glavna {
     private static void ispisiKorisnike(Korisnik[] korisnici) {
         for (int i = 0; i < korisnici.length; i++) {
             Korisnik korisnik = korisnici[i];
-            System.out.println((i + 1) + " " + korisnik.getImeIPrezime());
+            System.out.println((i + 1) + " " + korisnik.dohvatiKontakt());
         }
     }
 
@@ -116,16 +129,51 @@ public class Glavna {
         return unos.nextInt();
     }
 
+    public static void tipoviOglasa() {
+        System.out.println("1. Usluge");
+        System.out.println("2. Automobil");
+    }
 
-    private static Artikl podaciArtikla(Scanner unos, int i) {
-        System.out.print("Unesite naslov " + (i + 1) + ". oglasa artikla -> ");
+    private static Artikl podaciArtiklaAutomobila(Scanner unos, int i) {
+        System.out.print("Unesite naslov " + (i + 1) + ". oglasa automobila -> ");
         String naslov = unos.nextLine();
-        System.out.print("Unesite opis " + (i + 1) + ". oglasa artikla -> ");
+        System.out.print("Unesite opis " + (i + 1) + ". oglasa automobila -> ");
         String opis = unos.nextLine();
-        System.out.print("Unesite cijenu " + (i + 1) + ". oglasa artikla -> ");
+        System.out.print("Unesite snagu " + (i+1) + ". u (Ks) oglasa automobila -> ");
+        BigDecimal snagaKs = unos.nextBigDecimal();
+        unos.nextLine();
+        System.out.print("Unesite cijenu " + (i + 1) + ". oglasa automobila -> ");
         BigDecimal cijena = unos.nextBigDecimal();
         unos.nextLine();
-        return new Artikl(naslov, opis, cijena);
+        return new Artikl(naslov, opis, cijena) {
+            @Override
+            public String tekstOglasa() {
+                return String.format("""
+                        Naslov automobila: %s\040
+                        Opis automobila: %s\040
+                        Snaga automobila: %s\040
+                        Cijena automobila: %s""", naslov, opis, snagaKs, cijena);
+            }
+        };
+    }
+
+    private static Artikl podaciArtiklaUsluge(Scanner unos, int i) {
+        System.out.print("Unesite naslov " + (i + 1) + ". oglasa usluge -> ");
+        String naslov = unos.nextLine();
+        System.out.print("Unesite opis " + (i + 1) + ". oglasa usluge -> ");
+        String opis = unos.nextLine();
+        System.out.print("Unesite cijenu " + (i + 1) + ". oglasa usluge -> ");
+        BigDecimal cijena = unos.nextBigDecimal();
+        unos.nextLine();
+        return new Artikl(naslov, opis, cijena) {
+            @Override
+            public String tekstOglasa() {
+                return String.format("""
+                        Naslov: %s\040
+                        Opis: %s\040
+                        cijena: %s""", naslov, opis, cijena);
+            }
+        };
     }
 
     private static String podaciKategorije(Scanner unos, int i) {
@@ -133,15 +181,43 @@ public class Glavna {
         return unos.nextLine();
     }
 
-    private static Korisnik podaciKorisnika(Scanner unos, int i) {
-        System.out.print("Unesite ime " + (i + 1) + ". korisnika -> ");
+    public static void tipoviKorisnika() {
+            System.out.println("1. Privatni");
+            System.out.println("2. Poslovni");
+        }
+
+
+    private static Korisnik podaciPrivatnogKorisnika(Scanner unos, int i) {
+        System.out.print("Unesite ime " + (i + 1) + ". osobe -> ");
         String ime = unos.nextLine();
-        System.out.print("Unesite prezime " + (i + 1) + ". korisnika -> ");
+        System.out.print("Unesite prezime " + (i + 1) + ". osobe -> ");
         String prezime = unos.nextLine();
-        System.out.print("Unesite email " + (i + 1) + ". korisnika -> ");
+        System.out.print("Unesite email " + (i + 1) + ". osobe -> ");
         String email = unos.nextLine();
-        System.out.print("Unesite telefon " + (i + 1) + ". korisnika -> ");
+        System.out.print("Unesite telefon " + (i + 1) + ". osobe -> ");
         String telefon = unos.nextLine();
-        return new Korisnik(ime, prezime, email, telefon);
+        return new Korisnik(email, telefon) {
+            @Override
+            public String dohvatiKontakt() {
+                return String.format("Osobni podaci prodavatelja: %s, email: %s, tel: %s", ime + " " + prezime, getEmail(), getTelefon());
+            }
+        };
+    }
+
+    private static Korisnik podaciPoslovnogKorisnika(Scanner unos, int i) {
+        System.out.print("Unesite naziv " + (i + 1) + ". tvrtke -> ");
+        String naziv = unos.nextLine();
+        System.out.print("Unesite email " + (i + 1) + ". tvrtke -> ");
+        String email = unos.nextLine();
+        System.out.print("Unesite web " + (i + 1) + ". tvrtke -> ");
+        String web = unos.nextLine();
+        System.out.print("Unesite telefon " + (i + 1) + ". tvrtke -> ");
+        String telefon = unos.nextLine();
+        return new Korisnik(email, telefon) {
+            @Override
+            public String dohvatiKontakt() {
+                return String.format("Naziv tvrtke: %s, email: %s, web: %s, tel: %s", naziv, getEmail(), web, getTelefon());
+            }
+        };
     }
 }

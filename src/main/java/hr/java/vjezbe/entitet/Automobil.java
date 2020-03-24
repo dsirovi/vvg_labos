@@ -19,17 +19,7 @@ public class Automobil extends Artikl implements Vozilo {
     }
 
     @Override
-    public BigDecimal izracunajKw() {
-        return null;
-    }
-
-    @Override
     public BigDecimal izracunajGrupuOsiguranja() {
-        return null;
-    }
-
-    @Override
-    public BigDecimal izracunajCijenuOsiguranja() {
         return null;
     }
 
