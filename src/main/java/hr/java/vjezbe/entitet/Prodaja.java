@@ -1,8 +1,12 @@
 package hr.java.vjezbe.entitet;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Prodaja {
+
+    private static final DateTimeFormatter MOJ_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+
     private Artikl artikl;
     private Korisnik korisnik;
     private LocalDate datumObjave;
@@ -35,5 +39,14 @@ public class Prodaja {
 
     public void setDatumObjave(LocalDate datumObjave) {
         this.datumObjave = datumObjave;
+    }
+
+    @Override
+    public String toString() {
+        return getArtikl().tekstOglasa() +
+                "\n" +
+                "Datum objave: " + getDatumObjave().format(MOJ_FORMAT) +
+                "\n" +
+                getKorisnik().dohvatiKontakt();
     }
 }

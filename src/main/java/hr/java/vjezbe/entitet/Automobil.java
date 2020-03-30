@@ -3,6 +3,12 @@ package hr.java.vjezbe.entitet;
 import java.math.BigDecimal;
 
 public class Automobil extends Artikl implements Vozilo {
+
+    private static final BigDecimal GRANICA_PRVE_KATEGORIJE = BigDecimal.valueOf(105);
+    private static final BigDecimal GRANICA_DRUGE_KATEGORIJE = BigDecimal.valueOf(140);
+    private static final BigDecimal GRANICA_TRECE_KATEGORIJE = BigDecimal.valueOf(180);
+    private static final BigDecimal GRANICA_CETVRTE_KATEGORIJE = BigDecimal.valueOf(250);
+
     private BigDecimal snagaKs;
 
     public Automobil(String naslov, String opis, BigDecimal cijena, BigDecimal snagaKs) {
@@ -20,11 +26,28 @@ public class Automobil extends Artikl implements Vozilo {
 
     @Override
     public BigDecimal izracunajGrupuOsiguranja() {
-        return null;
+        int grupa;
+        if (snagaKs.compareTo(GRANICA_PRVE_KATEGORIJE) <= 0){
+            grupa = 1;
+        }else if (snagaKs.compareTo(GRANICA_DRUGE_KATEGORIJE) <= 0){
+            grupa = 2;
+        }else if (snagaKs.compareTo(GRANICA_TRECE_KATEGORIJE) <= 0) {
+            grupa = 3;
+        }else if (snagaKs.compareTo(GRANICA_CETVRTE_KATEGORIJE) <= 0) {
+            grupa = 4;
+        }else {
+            grupa = 5;
+        }
+        return BigDecimal.valueOf(grupa);
     }
 
     @Override
     public String tekstOglasa() {
-        return String.format("Naslov: %s, Opis: %s, Snaga: %s, Cijena osiguranja: %s, Cijena automobila: %s", getNaslov(), getOpis(), snagaKs, izracunajCijenuOsiguranja(), getCijena());
+        return String.format("""
+                        Naslov automobila: %s
+                        Opis automobila: %s
+                        Snaga automobila: %s
+                        Izračun osiguranja automobila: %s
+                        Cijena automobila: %s""", getNaslov(), getOpis(), snagaKs, izracunajCijenuOsiguranja(), getCijena());
     }
 }

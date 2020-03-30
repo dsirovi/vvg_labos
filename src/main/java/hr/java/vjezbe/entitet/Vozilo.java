@@ -17,19 +17,19 @@ public interface Vozilo {
         int cijena = 0;
         switch (grupa.intValue()) {
             case 1:
-                cijena = (int) (Math.random() * 100 + 1);
+                cijena = (int) (Math.random() * 500 + 1);
                 break;
             case 2:
-                cijena = (int) (Math.random() * 200 + 101);
+                cijena = (int) (Math.random() * 1000 + 501);
                 break;
             case 3:
-                cijena = (int) (Math.random() * 300 + 201);
+                cijena = (int) (Math.random() * 1500 + 1001);
                 break;
             case 4:
-                cijena = (int) (Math.random() * 400 + 301);
+                cijena = (int) (Math.random() * 2000 + 1501);
                 break;
             case 5:
-                cijena = (int) (Math.random() * 1000 + 401);
+                cijena = (int) (Math.random() * 3000 + 2001);
                 break;
         }
 

@@ -1,13 +1,9 @@
 package hr.java.vjezbe.glavna;
 
-import hr.java.vjezbe.entitet.Artikl;
-import hr.java.vjezbe.entitet.Kategorija;
-import hr.java.vjezbe.entitet.Korisnik;
-import hr.java.vjezbe.entitet.Prodaja;
+import hr.java.vjezbe.entitet.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Glavna {
@@ -49,10 +45,10 @@ public class Glavna {
                 tipoviOglasa();
                 int odabraniOglas = dohvatiOdabir(unos);
                 unos.nextLine();
-                if (odabraniOglas == 1){
+                if (odabraniOglas == 1) {
                     Artikl artikl = podaciArtiklaUsluge(unos, j);
                     artikli[j] = artikl;
-                }else{
+                } else {
                     Artikl artikl = podaciArtiklaAutomobila(unos, j);
                     artikli[j] = artikl;
                 }
@@ -90,15 +86,11 @@ public class Glavna {
             Prodaja prodaja = new Prodaja(odabraniArtikl, odabraniKorisnik, LocalDate.now());
             prodaje[i] = prodaja;
         }
-        DateTimeFormatter mojFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+
         System.out.println("Trenutno su na prodaju: ");
         System.out.println("_____________________________________________");
         for (Prodaja prodaja : prodaje) {
-            Artikl artikl = prodaja.getArtikl();
-            Korisnik korisnik = prodaja.getKorisnik();
-            System.out.println(artikl.tekstOglasa());
-            System.out.println("Datum obajve: " + prodaja.getDatumObjave().format(mojFormat));
-            System.out.println(korisnik.dohvatiKontakt());
+            System.out.println(prodaja);
             System.out.println("_____________________________________________");
         }
     }
@@ -139,22 +131,13 @@ public class Glavna {
         String naslov = unos.nextLine();
         System.out.print("Unesite opis " + (i + 1) + ". oglasa automobila -> ");
         String opis = unos.nextLine();
-        System.out.print("Unesite snagu " + (i+1) + ". u (Ks) oglasa automobila -> ");
+        System.out.print("Unesite snagu " + (i + 1) + ". u (Ks) oglasa automobila -> ");
         BigDecimal snagaKs = unos.nextBigDecimal();
         unos.nextLine();
         System.out.print("Unesite cijenu " + (i + 1) + ". oglasa automobila -> ");
         BigDecimal cijena = unos.nextBigDecimal();
         unos.nextLine();
-        return new Artikl(naslov, opis, cijena) {
-            @Override
-            public String tekstOglasa() {
-                return String.format("""
-                        Naslov automobila: %s\040
-                        Opis automobila: %s\040
-                        Snaga automobila: %s\040
-                        Cijena automobila: %s""", naslov, opis, snagaKs, cijena);
-            }
-        };
+        return new Automobil(naslov, opis, cijena, snagaKs);
     }
 
     private static Artikl podaciArtiklaUsluge(Scanner unos, int i) {
@@ -165,15 +148,7 @@ public class Glavna {
         System.out.print("Unesite cijenu " + (i + 1) + ". oglasa usluge -> ");
         BigDecimal cijena = unos.nextBigDecimal();
         unos.nextLine();
-        return new Artikl(naslov, opis, cijena) {
-            @Override
-            public String tekstOglasa() {
-                return String.format("""
-                        Naslov: %s\040
-                        Opis: %s\040
-                        cijena: %s""", naslov, opis, cijena);
-            }
-        };
+        return new Usluga(naslov, opis, cijena);
     }
 
     private static String podaciKategorije(Scanner unos, int i) {
@@ -182,9 +157,9 @@ public class Glavna {
     }
 
     public static void tipoviKorisnika() {
-            System.out.println("1. Privatni");
-            System.out.println("2. Poslovni");
-        }
+        System.out.println("1. Privatni");
+        System.out.println("2. Poslovni");
+    }
 
 
     private static Korisnik podaciPrivatnogKorisnika(Scanner unos, int i) {
