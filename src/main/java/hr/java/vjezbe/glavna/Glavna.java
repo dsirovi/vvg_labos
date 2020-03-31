@@ -1,14 +1,22 @@
 package hr.java.vjezbe.glavna;
 
 import hr.java.vjezbe.entitet.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Glavna {
 
+    private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
+
     public static void main(String[] args) {
+
+        logger.info("App started    !!!!");
+        boolean petlja;
         Scanner unos = new Scanner(System.in);
 
         System.out.print("Unesite koliko korisnika zelite imati: ");
@@ -46,11 +54,29 @@ public class Glavna {
                 int odabraniOglas = dohvatiOdabir(unos);
                 unos.nextLine();
                 if (odabraniOglas == 1) {
-                    Artikl artikl = podaciArtiklaUsluge(unos, j);
-                    artikli[j] = artikl;
+                    do {
+                        try {
+                            Artikl artikl = podaciArtiklaUsluge(unos, j);
+                            artikli[j] = artikl;
+                            petlja = false;
+                        } catch (InputMismatchException | ArithmeticException e) {
+                            logger.error("unesite brojacane vrijednosti", e);
+                            unos.nextLine();
+                            petlja = true;
+                        }
+                    } while (petlja);
                 } else {
-                    Artikl artikl = podaciArtiklaAutomobila(unos, j);
-                    artikli[j] = artikl;
+                    do {
+                        try {
+                            Artikl artikl = podaciArtiklaAutomobila(unos, j);
+                            artikli[j] = artikl;
+                            petlja = false;
+                        } catch (InputMismatchException | ArithmeticException e) {
+                            System.out.println("unesite brojacane vrijednosti");
+                            unos.nextLine();
+                            petlja = true;
+                        }
+                    } while (petlja);
                 }
 
             }
@@ -65,6 +91,23 @@ public class Glavna {
     }
 
 
+    public int unosBroja(Scanner unos){
+        int broj = 0;
+        boolean petlja = false;
+
+        do {
+            try {
+                broj = unos.nextInt();
+                unos.nextLine();
+                petlja = false;
+            }catch (InputMismatchException | ArithmeticException e){
+                System.out.println("unesite brojacane vrijednosti");
+                unos.nextLine();
+                petlja = true;
+            }
+        }while (petlja);
+        return broj;
+    }
     private static void obaviObjavuAtrikala(Scanner unos, Korisnik[] korisnici, Kategorija[] kategorije, int brojOglasa) {
         Prodaja[] prodaje = new Prodaja[brojOglasa];
         for (int i = 0; i < brojOglasa; i++) {
@@ -121,7 +164,7 @@ public class Glavna {
         return unos.nextInt();
     }
 
-    public static void tipoviOglasa() {
+    private static void tipoviOglasa() {
         System.out.println("1. Usluge");
         System.out.println("2. Automobil");
     }
@@ -156,7 +199,7 @@ public class Glavna {
         return unos.nextLine();
     }
 
-    public static void tipoviKorisnika() {
+    private static void tipoviKorisnika() {
         System.out.println("1. Privatni");
         System.out.println("2. Poslovni");
     }
