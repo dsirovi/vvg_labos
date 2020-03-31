@@ -2,9 +2,19 @@ package hr.java.vjezbe.entitet;
 
 import java.math.BigDecimal;
 
+/**
+ * Pretvara konjske snage u kilovate
+ * Izracunava grupu osiguranja na osnovu cijene
+ */
 public interface Vozilo {
     double KILOWATTS = 0.7457;
 
+    /**
+     * Pretvara konjske snage u kilowate
+     *
+     * @param horsePower
+     * @return
+     */
     default BigDecimal izracunajKw(BigDecimal horsePower) {
         return horsePower.multiply(new BigDecimal(KILOWATTS));
     }

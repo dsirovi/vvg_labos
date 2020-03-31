@@ -3,8 +3,7 @@ package hr.java.vjezbe.entitet;
 import java.math.BigDecimal;
 
 /**
- *
- *
+ * Podatke arikla posljeduje u tekst oglasa
  */
 public abstract class Artikl {
     private String naslov;

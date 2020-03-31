@@ -1,5 +1,9 @@
 package hr.java.vjezbe.entitet;
 
+/**
+ * Podatke poslovnog korisnika ispisuje prilikom kreiranja oglasa
+ */
+
 public class PoslovniKorisnik extends Korisnik {
     private String naziv;
     private String web;

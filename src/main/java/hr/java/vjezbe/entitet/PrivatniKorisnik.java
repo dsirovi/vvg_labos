@@ -1,5 +1,9 @@
 package hr.java.vjezbe.entitet;
 
+/**
+ * Podatke privatnog korisnika ispisuje prilikom kreiranja oglasa
+ */
+
 public class PrivatniKorisnik extends Korisnik {
     private String ime;
     private String prezime;

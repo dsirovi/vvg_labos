@@ -6,6 +6,10 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 
+/**
+ * Prima podatke o vozilu i sprema ih automobil te prosljeduje u artikle
+ * na osnovu konjskih snaga sprema u odredenu grupu osiguranja
+ */
 public class Automobil extends Artikl implements Vozilo {
 
     private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
