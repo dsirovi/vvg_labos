@@ -1,5 +1,8 @@
 package hr.java.vjezbe.entitet;
 
+/**
+ * podatke o nazivu i artiklima sprema u kategorije
+ */
 public class Kategorija {
     private String naziv;
     private Artikl[] artikli;

@@ -1,7 +1,7 @@
 package hr.java.vjezbe.entitet;
 
 /**
- *Podatke o korinisku prosljeduje u metodu dohvatiKorisnik
+ *Prima podatke o mailu i telefonu koriniska
  */
 public abstract class Korisnik {
     private String email;

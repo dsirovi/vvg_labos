@@ -1,7 +1,7 @@
 package hr.java.vjezbe.entitet;
 
 /**
- * Podatke privatnog korisnika ispisuje prilikom kreiranja oglasa
+ * Prima podatke o privatnim korisnicima
  */
 
 public class PrivatniKorisnik extends Korisnik {
@@ -29,7 +29,9 @@ public class PrivatniKorisnik extends Korisnik {
     public void setPrezime(String prezime) {
         this.prezime = prezime;
     }
-
+    /**
+     * @return vraca podatke o privatnim korisnicima
+     */
     @Override
     public String dohvatiKontakt() {
         return String.format("Ime: %s, Prezime: %s, email: %S, tel: %s,", ime, prezime, getEmail(), getTelefon());

@@ -1,7 +1,7 @@
 package hr.java.vjezbe.entitet;
 
 /**
- * Podatke poslovnog korisnika ispisuje prilikom kreiranja oglasa
+ * Prima podatke o poslovnim korisnicima
  */
 
 public class PoslovniKorisnik extends Korisnik {
@@ -30,6 +30,9 @@ public class PoslovniKorisnik extends Korisnik {
         this.web = web;
     }
 
+    /**
+     * @return vraca podatke o poslovnim korisnicima
+     */
     @Override
     public String dohvatiKontakt() {
         return String.format("Naziv: %s, email: %s, web: %s, tel: %s", naziv, getEmail(), web, getTelefon());

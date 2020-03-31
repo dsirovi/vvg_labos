@@ -1,15 +1,15 @@
 package hr.java.vjezbe.entitet;
 
-/**
- * Sprema podatke artikla, korisnika i datum obajve te ispisuje tekst oglasa
- */
-
 import hr.java.vjezbe.glavna.Glavna;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+/**
+ * Sprema podatke artikla, korisnika i datum obajve te ispisuje tekst oglasa
+ */
 
 public class Prodaja {
 
