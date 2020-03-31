@@ -9,9 +9,9 @@ public interface Vozilo {
         return horsePower.multiply(new BigDecimal(KILOWATTS));
     }
 
-    BigDecimal izracunajGrupuOsiguranja();
+    BigDecimal izracunajGrupuOsiguranja() throws Exception;
 
-    default BigDecimal izracunajCijenuOsiguranja() {
+    default BigDecimal izracunajCijenuOsiguranja() throws Exception {
         BigDecimal grupa = izracunajGrupuOsiguranja();
 
         int cijena = 0;

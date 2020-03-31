@@ -9,14 +9,22 @@ import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Sluzi za ispis aktivnih oglasa
+ *
+ */
 public class Glavna {
 
     private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
 
+    /**
+     * Sluzi
+     *
+     * @param args
+     */
     public static void main(String[] args) {
 
         logger.info("App started    !!!!");
-        boolean petlja;
         Scanner unos = new Scanner(System.in);
 
         int brojKorisnika = unosBroja(unos, "Unesite koliko korisnika zelite imati: ");
@@ -64,7 +72,13 @@ public class Glavna {
         obaviObjavuAtrikala(unos, korisnici, kategorije, brojOglasa);
     }
 
-
+    /**
+     * Provjera dali su uneseni brojevi
+     *
+     * @param unos
+     * @param poruka
+     * @return
+     */
     private static int unosBroja(Scanner unos, String poruka) {
         int broj = 0;
         boolean petlja;
@@ -76,7 +90,7 @@ public class Glavna {
                 unos.nextLine();
                 petlja = false;
             } catch (InputMismatchException | ArithmeticException e) {
-                logger.error("unesite brojacane vrijednosti", e);
+                logger.error("Molim vas unesite brojacane vrijednosti");
                 unos.nextLine();
                 petlja = true;
             }
@@ -84,6 +98,14 @@ public class Glavna {
         return broj;
     }
 
+    /**
+     * Uzima unesene podatke i radi ispis aktivnih oglasa
+     *
+     * @param unos
+     * @param korisnici
+     * @param kategorije
+     * @param brojOglasa
+     */
     private static void obaviObjavuAtrikala(Scanner unos, Korisnik[] korisnici, Kategorija[] kategorije, int brojOglasa) {
         Prodaja[] prodaje = new Prodaja[brojOglasa];
         for (int i = 0; i < brojOglasa; i++) {
@@ -114,6 +136,11 @@ public class Glavna {
         }
     }
 
+    /**
+     * Ispisuje artikle
+     *
+     * @param artikli
+     */
     private static void ispisiArtikle(Artikl[] artikli) {
         for (int i = 1; i <= artikli.length; i++) {
             Artikl artikl = artikli[i - 1];
@@ -121,6 +148,11 @@ public class Glavna {
         }
     }
 
+    /**
+     * Ispisuje kategorije
+     *
+     * @param kategorije
+     */
     private static void ispisiKategoije(Kategorija[] kategorije) {
         for (int i = 1; i <= kategorije.length; i++) {
             Kategorija kategorija = kategorije[i - 1];
@@ -128,6 +160,11 @@ public class Glavna {
         }
     }
 
+    /**
+     * Ispisuje korisnike
+     *
+     * @param korisnici
+     */
     private static void ispisiKorisnike(Korisnik[] korisnici) {
         for (int i = 0; i < korisnici.length; i++) {
             Korisnik korisnik = korisnici[i];
@@ -135,16 +172,32 @@ public class Glavna {
         }
     }
 
+    /**
+     * Dohvaca odabir i provjerava da li je unesen broj
+     *
+     * @param unos
+     * @return
+     */
     private static int dohvatiOdabir(Scanner unos) {
         int broj = unosBroja(unos, "Odabir -> ");
         return broj;
     }
 
+    /**
+     * Ispiuje sve tipove oglasa
+     */
     private static void tipoviOglasa() {
         System.out.println("1. Usluge");
         System.out.println("2. Automobil");
     }
 
+    /**
+     * Uzime unesene podatke o automobilu i sprema ih u artikl
+     *
+     * @param unos
+     * @param i
+     * @return
+     */
     private static Artikl podaciArtiklaAutomobila(Scanner unos, int i) {
         System.out.print("Unesite naslov " + (i + 1) + ". oglasa automobila -> ");
         String naslov = unos.nextLine();
@@ -156,6 +209,13 @@ public class Glavna {
         return new Automobil(naslov, opis, cijena, snagaKs);
     }
 
+    /**
+     * Uzima sve unesene podatke o uslugama i sprema ih u artikl
+     *
+     * @param unos
+     * @param i
+     * @return
+     */
     private static Artikl podaciArtiklaUsluge(Scanner unos, int i) {
         System.out.print("Unesite naslov " + (i + 1) + ". oglasa usluge -> ");
         String naslov = unos.nextLine();
@@ -165,17 +225,33 @@ public class Glavna {
         return new Usluga(naslov, opis, cijena);
     }
 
+    /**
+     * Uzima podatke o kategoriji
+     *
+     * @param unos
+     * @param i
+     * @return
+     */
     private static String podaciKategorije(Scanner unos, int i) {
         System.out.print("Unesite naziv " + (i + 1) + ". kategorije -> ");
         return unos.nextLine();
     }
 
+    /**
+     * Ispisuje sve tipove korisnika
+     */
     private static void tipoviKorisnika() {
         System.out.println("1. Privatni");
         System.out.println("2. Poslovni");
     }
 
-
+    /**
+     * Uzima sve podatke o privatnog korisnika i sprema u korisnike
+     *
+     * @param unos
+     * @param i
+     * @return
+     */
     private static Korisnik podaciPrivatnogKorisnika(Scanner unos, int i) {
         System.out.print("Unesite ime " + (i + 1) + ". osobe -> ");
         String ime = unos.nextLine();
@@ -193,6 +269,13 @@ public class Glavna {
         };
     }
 
+    /**
+     * Uzima sve podatke o poslovnog korisnika i sprema u korisnike
+     *
+     * @param unos
+     * @param i
+     * @return
+     */
     private static Korisnik podaciPoslovnogKorisnika(Scanner unos, int i) {
         System.out.print("Unesite naziv " + (i + 1) + ". tvrtke -> ");
         String naziv = unos.nextLine();

@@ -9,9 +9,6 @@ public class Usluga extends Artikl {
 
     @Override
     public String tekstOglasa() {
-        return String.format("""
-                        Naslov: %s\040
-                        Opis: %s\040
-                        cijena: %s""", getNaslov(), getOpis(), getCijena());
+        return String.format("Naslov: %s \nOpis: %s \ncijena: %s", getNaslov(), getOpis(), getCijena());
     }
 }

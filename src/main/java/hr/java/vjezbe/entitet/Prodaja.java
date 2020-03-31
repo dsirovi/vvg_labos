@@ -1,9 +1,15 @@
 package hr.java.vjezbe.entitet;
 
+import hr.java.vjezbe.glavna.Glavna;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Prodaja {
+
+    private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
 
     private static final DateTimeFormatter MOJ_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
 
@@ -43,10 +49,15 @@ public class Prodaja {
 
     @Override
     public String toString() {
-        return getArtikl().tekstOglasa() +
-                "\n" +
-                "Datum objave: " + getDatumObjave().format(MOJ_FORMAT) +
-                "\n" +
-                getKorisnik().dohvatiKontakt();
+        try {
+            return getArtikl().tekstOglasa() +
+                    "\n" +
+                    "Datum objave: " + getDatumObjave().format(MOJ_FORMAT) +
+                    "\n" +
+                    getKorisnik().dohvatiKontakt();
+        } catch (Exception e) {
+            logger.error("Dogodila se greska", e);
+        }
+        return toString();
     }
 }

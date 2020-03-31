@@ -1,8 +1,14 @@
 package hr.java.vjezbe.entitet;
 
+import hr.java.vjezbe.glavna.Glavna;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
 
 public class Automobil extends Artikl implements Vozilo {
+
+    private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
 
     private static final BigDecimal GRANICA_PRVE_KATEGORIJE = BigDecimal.valueOf(105);
     private static final BigDecimal GRANICA_DRUGE_KATEGORIJE = BigDecimal.valueOf(140);
@@ -42,12 +48,12 @@ public class Automobil extends Artikl implements Vozilo {
     }
 
     @Override
-    public String tekstOglasa() {
-        return String.format("""
-                        Naslov automobila: %s
-                        Opis automobila: %s
-                        Snaga automobila: %s
-                        Izračun osiguranja automobila: %s
-                        Cijena automobila: %s""", getNaslov(), getOpis(), snagaKs, izracunajCijenuOsiguranja(), getCijena());
+    public String tekstOglasa() throws Exception {
+        try {
+            return String.format("Naslov automobila: %s \nOpis automobila: %s \nSnaga automobila: %s \nIzracun osiguranja automobila: %s \nCijena automobila: %s", getNaslov(), getOpis(), snagaKs, izracunajCijenuOsiguranja(), getCijena());
+        }catch (Exception e) {
+            logger.error("Dogodila se greska", e);
+        }
+        return tekstOglasa();
     }
 }
