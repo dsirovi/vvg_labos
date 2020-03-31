@@ -17,11 +17,6 @@ public class Glavna {
 
     private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
 
-    /**
-     * Sluzi
-     *
-     * @param args
-     */
     public static void main(String[] args) {
 
         logger.info("App started    !!!!");
