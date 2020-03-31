@@ -19,16 +19,13 @@ public class Glavna {
         boolean petlja;
         Scanner unos = new Scanner(System.in);
 
-        System.out.print("Unesite koliko korisnika zelite imati: ");
-        int brojKorisnika = unos.nextInt();
-        unos.nextLine();
+        int brojKorisnika = unosBroja(unos, "Unesite koliko korisnika zelite imati: ");
 
         Korisnik[] korisnici = new Korisnik[brojKorisnika];
         for (int i = 0; i < brojKorisnika; i++) {
             System.out.println("Unesite tip " + (i + 1) + ". korisnika -> ");
             tipoviKorisnika();
             int odabraniKorisnik = dohvatiOdabir(unos);
-            unos.nextLine();
             if (odabraniKorisnik == 1) {
                 korisnici[i] = podaciPrivatnogKorisnika(unos, i);
             } else {
@@ -36,47 +33,24 @@ public class Glavna {
             }
         }
 
-        System.out.print("Unesite broj kategorija koliko zelite imati: ");
-        int brojKategorija = unos.nextInt();
-        unos.nextLine();
+        int brojKategorija = unosBroja(unos, "Unesite broj kategorija koliko zelite imati: ");
 
         Kategorija[] kategorije = new Kategorija[brojKategorija];
 
         for (int i = 0; i < brojKategorija; i++) {
             String nazivKategorije = podaciKategorije(unos, i);
-            System.out.print("Unesite broj atikala koliko zelite u kategoriji: ");
-            int brojArtikala = unos.nextInt();
-            unos.nextLine();
+            int brojArtikala = unosBroja(unos, "Unesite broj atikala koliko zelite u kategoriji: ");
             Artikl[] artikli = new Artikl[brojArtikala];
             for (int j = 0; j < brojArtikala; j++) {
                 System.out.println("Unesite tip " + (j + 1) + ". oglasa");
                 tipoviOglasa();
                 int odabraniOglas = dohvatiOdabir(unos);
-                unos.nextLine();
                 if (odabraniOglas == 1) {
-                    do {
-                        try {
-                            Artikl artikl = podaciArtiklaUsluge(unos, j);
-                            artikli[j] = artikl;
-                            petlja = false;
-                        } catch (InputMismatchException | ArithmeticException e) {
-                            logger.error("unesite brojacane vrijednosti", e);
-                            unos.nextLine();
-                            petlja = true;
-                        }
-                    } while (petlja);
+                    Artikl artikl = podaciArtiklaUsluge(unos, j);
+                    artikli[j] = artikl;
                 } else {
-                    do {
-                        try {
-                            Artikl artikl = podaciArtiklaAutomobila(unos, j);
-                            artikli[j] = artikl;
-                            petlja = false;
-                        } catch (InputMismatchException | ArithmeticException e) {
-                            System.out.println("unesite brojacane vrijednosti");
-                            unos.nextLine();
-                            petlja = true;
-                        }
-                    } while (petlja);
+                    Artikl artikl = podaciArtiklaAutomobila(unos, j);
+                    artikli[j] = artikl;
                 }
 
             }
@@ -91,23 +65,25 @@ public class Glavna {
     }
 
 
-    public int unosBroja(Scanner unos){
+    private static int unosBroja(Scanner unos, String poruka) {
         int broj = 0;
-        boolean petlja = false;
+        boolean petlja;
 
         do {
             try {
+                System.out.print(poruka);
                 broj = unos.nextInt();
                 unos.nextLine();
                 petlja = false;
-            }catch (InputMismatchException | ArithmeticException e){
-                System.out.println("unesite brojacane vrijednosti");
+            } catch (InputMismatchException | ArithmeticException e) {
+                logger.error("unesite brojacane vrijednosti", e);
                 unos.nextLine();
                 petlja = true;
             }
-        }while (petlja);
+        } while (petlja);
         return broj;
     }
+
     private static void obaviObjavuAtrikala(Scanner unos, Korisnik[] korisnici, Kategorija[] kategorije, int brojOglasa) {
         Prodaja[] prodaje = new Prodaja[brojOglasa];
         for (int i = 0; i < brojOglasa; i++) {
@@ -160,8 +136,8 @@ public class Glavna {
     }
 
     private static int dohvatiOdabir(Scanner unos) {
-        System.out.print("Odabir -> ");
-        return unos.nextInt();
+        int broj = unosBroja(unos, "Odabir -> ");
+        return broj;
     }
 
     private static void tipoviOglasa() {
@@ -174,12 +150,9 @@ public class Glavna {
         String naslov = unos.nextLine();
         System.out.print("Unesite opis " + (i + 1) + ". oglasa automobila -> ");
         String opis = unos.nextLine();
-        System.out.print("Unesite snagu " + (i + 1) + ". u (Ks) oglasa automobila -> ");
-        BigDecimal snagaKs = unos.nextBigDecimal();
-        unos.nextLine();
+        BigDecimal snagaKs = BigDecimal.valueOf(unosBroja(unos, "Unesite snagu " + (i + 1) + ". u (Ks) oglasa automobila -> "));
         System.out.print("Unesite cijenu " + (i + 1) + ". oglasa automobila -> ");
-        BigDecimal cijena = unos.nextBigDecimal();
-        unos.nextLine();
+        BigDecimal cijena = BigDecimal.valueOf(unosBroja(unos, "Unesite cijenu " + (i + 1) + ". oglasa automobila -> "));
         return new Automobil(naslov, opis, cijena, snagaKs);
     }
 
@@ -188,9 +161,7 @@ public class Glavna {
         String naslov = unos.nextLine();
         System.out.print("Unesite opis " + (i + 1) + ". oglasa usluge -> ");
         String opis = unos.nextLine();
-        System.out.print("Unesite cijenu " + (i + 1) + ". oglasa usluge -> ");
-        BigDecimal cijena = unos.nextBigDecimal();
-        unos.nextLine();
+        BigDecimal cijena = BigDecimal.valueOf(unosBroja(unos, "Unesite cijenu " + (i + 1) + ". oglasa usluge -> "));
         return new Usluga(naslov, opis, cijena);
     }
 
