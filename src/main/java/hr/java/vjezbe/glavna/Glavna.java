@@ -70,9 +70,9 @@ public class Glavna {
     /**
      * Provjera dali su uneseni brojevi
      *
-     * @param unos
-     * @param poruka
-     * @return
+     * @param unos trazi unos korisnika
+     * @param poruka ispisuje poruku korinisku
+     * @return vraca kosnicki unos
      */
     private static int unosBroja(Scanner unos, String poruka) {
         int broj = 0;
@@ -96,10 +96,10 @@ public class Glavna {
     /**
      * Uzima unesene podatke i radi ispis aktivnih oglasa
      *
-     * @param unos
-     * @param korisnici
-     * @param kategorije
-     * @param brojOglasa
+     * @param unos trazi unos korisnika
+     * @param korisnici ispisuje sve korisnike i trazi odabir
+     * @param kategorije ispisuje sve kategorije i trazi odabir
+     * @param brojOglasa trayi korisnika da unese broj aktivnih oglasa
      */
     private static void obaviObjavuAtrikala(Scanner unos, Korisnik[] korisnici, Kategorija[] kategorije, int brojOglasa) {
         Prodaja[] prodaje = new Prodaja[brojOglasa];
@@ -132,9 +132,9 @@ public class Glavna {
     }
 
     /**
-     * Ispisuje artikle
+     * Ispisi artikle
      *
-     * @param artikli
+     * @param artikli ispisuje sve artikle
      */
     private static void ispisiArtikle(Artikl[] artikli) {
         for (int i = 1; i <= artikli.length; i++) {
@@ -144,9 +144,9 @@ public class Glavna {
     }
 
     /**
-     * Ispisuje kategorije
+     * Ispisi kategorije
      *
-     * @param kategorije
+     * @param kategorije ispisuje sve kategorije
      */
     private static void ispisiKategoije(Kategorija[] kategorije) {
         for (int i = 1; i <= kategorije.length; i++) {
@@ -156,9 +156,9 @@ public class Glavna {
     }
 
     /**
-     * Ispisuje korisnike
+     * Ispisi korisnike
      *
-     * @param korisnici
+     * @param korisnici ispisuje sve korisnike
      */
     private static void ispisiKorisnike(Korisnik[] korisnici) {
         for (int i = 0; i < korisnici.length; i++) {
@@ -170,8 +170,8 @@ public class Glavna {
     /**
      * Dohvaca odabir i provjerava da li je unesen broj
      *
-     * @param unos
-     * @return
+     * @param unos trazi korisnika unos
+     * @return vraca korisnicki unos
      */
     private static int dohvatiOdabir(Scanner unos) {
         int broj = unosBroja(unos, "Odabir -> ");
@@ -189,9 +189,9 @@ public class Glavna {
     /**
      * Uzime unesene podatke o automobilu i sprema ih u artikl
      *
-     * @param unos
-     * @param i
-     * @return
+     * @param unos trazi korisnika unos
+     * @param i generira redna mjesta artikla
+     * @return vraca podatke artikla
      */
     private static Artikl podaciArtiklaAutomobila(Scanner unos, int i) {
         System.out.print("Unesite naslov " + (i + 1) + ". oglasa automobila -> ");
@@ -207,9 +207,9 @@ public class Glavna {
     /**
      * Uzima sve unesene podatke o uslugama i sprema ih u artikl
      *
-     * @param unos
-     * @param i
-     * @return
+     * @param unos trazi korisnika unos
+     * @param i generira redna mjesta artikla
+     * @return vraca podatke usluge
      */
     private static Artikl podaciArtiklaUsluge(Scanner unos, int i) {
         System.out.print("Unesite naslov " + (i + 1) + ". oglasa usluge -> ");
@@ -223,9 +223,9 @@ public class Glavna {
     /**
      * Uzima podatke o kategoriji
      *
-     * @param unos
-     * @param i
-     * @return
+     * @param unos trazi korisnika unos
+     * @param i generira redna mjesta artikla
+     * @return vraca podatke kategorije
      */
     private static String podaciKategorije(Scanner unos, int i) {
         System.out.print("Unesite naziv " + (i + 1) + ". kategorije -> ");
@@ -243,9 +243,9 @@ public class Glavna {
     /**
      * Uzima sve podatke o privatnog korisnika i sprema u korisnike
      *
-     * @param unos
-     * @param i
-     * @return
+     * @param unos trazi korisnika unos
+     * @param i generira redna mjesta korisnika
+     * @return vraca podatke privatnog korisnika
      */
     private static Korisnik podaciPrivatnogKorisnika(Scanner unos, int i) {
         System.out.print("Unesite ime " + (i + 1) + ". osobe -> ");
@@ -267,9 +267,9 @@ public class Glavna {
     /**
      * Uzima sve podatke o poslovnog korisnika i sprema u korisnike
      *
-     * @param unos
-     * @param i
-     * @return
+     * @param unos trazi korisnika unos
+     * @param i generira redna mjesta korisnika
+     * @return vraca podatke poslovnog korisnika
      */
     private static Korisnik podaciPoslovnogKorisnika(Scanner unos, int i) {
         System.out.print("Unesite naziv " + (i + 1) + ". tvrtke -> ");

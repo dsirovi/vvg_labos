@@ -12,8 +12,8 @@ public interface Vozilo {
     /**
      * Pretvara konjske snage u kilowate
      *
-     * @param horsePower
-     * @return
+     * @param horsePower uzima konjske snage
+     * @return vraca kilowate
      */
     default BigDecimal izracunajKw(BigDecimal horsePower) {
         return horsePower.multiply(new BigDecimal(KILOWATTS));
