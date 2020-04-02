@@ -1,9 +1,5 @@
 package hr.java.vjezbe.entitet;
 
-import hr.java.vjezbe.glavna.Glavna;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.math.BigDecimal;
 
 /**
@@ -11,8 +7,6 @@ import java.math.BigDecimal;
  * na osnovu konjskih snaga sprema u odredenu grupu osiguranja
  */
 public class Automobil extends Artikl implements Vozilo {
-
-    private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
 
     private static final BigDecimal GRANICA_PRVE_KATEGORIJE = BigDecimal.valueOf(105);
     private static final BigDecimal GRANICA_DRUGE_KATEGORIJE = BigDecimal.valueOf(140);
@@ -37,15 +31,15 @@ public class Automobil extends Artikl implements Vozilo {
     @Override
     public BigDecimal izracunajGrupuOsiguranja() {
         int grupa;
-        if (snagaKs.compareTo(GRANICA_PRVE_KATEGORIJE) <= 0){
+        if (snagaKs.compareTo(GRANICA_PRVE_KATEGORIJE) <= 0) {
             grupa = 1;
-        }else if (snagaKs.compareTo(GRANICA_DRUGE_KATEGORIJE) <= 0){
+        } else if (snagaKs.compareTo(GRANICA_DRUGE_KATEGORIJE) <= 0) {
             grupa = 2;
-        }else if (snagaKs.compareTo(GRANICA_TRECE_KATEGORIJE) <= 0) {
+        } else if (snagaKs.compareTo(GRANICA_TRECE_KATEGORIJE) <= 0) {
             grupa = 3;
-        }else if (snagaKs.compareTo(GRANICA_CETVRTE_KATEGORIJE) <= 0) {
+        } else if (snagaKs.compareTo(GRANICA_CETVRTE_KATEGORIJE) <= 0) {
             grupa = 4;
-        }else {
+        } else {
             grupa = 5;
         }
         return BigDecimal.valueOf(grupa);
@@ -53,11 +47,6 @@ public class Automobil extends Artikl implements Vozilo {
 
     @Override
     public String tekstOglasa() throws Exception {
-        try {
-            return String.format("Naslov automobila: %s \nOpis automobila: %s \nSnaga automobila: %s \nIzracun osiguranja automobila: %s \nCijena automobila: %s", getNaslov(), getOpis(), snagaKs, izracunajCijenuOsiguranja(), getCijena());
-        }catch (Exception e) {
-            logger.error("Dogodila se greska", e);
-        }
-        return tekstOglasa();
+        return String.format("Naslov automobila: %s \nOpis automobila: %s \nSnaga automobila: %s \nIzracun osiguranja automobila: %s \nCijena automobila: %s", getNaslov(), getOpis(), snagaKs, izracunajCijenuOsiguranja(), getCijena());
     }
 }

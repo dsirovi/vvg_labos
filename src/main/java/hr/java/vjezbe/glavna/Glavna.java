@@ -1,6 +1,7 @@
 package hr.java.vjezbe.glavna;
 
 import hr.java.vjezbe.entitet.*;
+import hr.java.vjezbe.iznimke.NemoguceOdreditiGrupuOsiguranjaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,13 +12,12 @@ import java.util.Scanner;
 
 /**
  * Sluzi za ispis aktivnih oglasa
- *
  */
 public class Glavna {
 
     private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NemoguceOdreditiGrupuOsiguranjaException {
 
         logger.info("App started    !!!!");
         Scanner unos = new Scanner(System.in);
@@ -52,8 +52,12 @@ public class Glavna {
                     Artikl artikl = podaciArtiklaUsluge(unos, j);
                     artikli[j] = artikl;
                 } else {
-                    Artikl artikl = podaciArtiklaAutomobila(unos, j);
-                    artikli[j] = artikl;
+                    try {
+                        Artikl artikl = podaciArtiklaAutomobila(unos, j);
+                        artikli[j] = artikl;
+                    } catch (InputMismatchException | ArithmeticException e) {
+                        throw new NemoguceOdreditiGrupuOsiguranjaException(e.getMessage());
+                    }
                 }
 
             }
@@ -70,7 +74,7 @@ public class Glavna {
     /**
      * Provjera dali su uneseni brojevi
      *
-     * @param unos trazi unos korisnika
+     * @param unos   trazi unos korisnika
      * @param poruka ispisuje poruku korinisku
      * @return vraca kosnicki unos
      */
@@ -96,8 +100,8 @@ public class Glavna {
     /**
      * Uzima unesene podatke i radi ispis aktivnih oglasa
      *
-     * @param unos trazi unos korisnika
-     * @param korisnici ispisuje sve korisnike i trazi odabir
+     * @param unos       trazi unos korisnika
+     * @param korisnici  ispisuje sve korisnike i trazi odabir
      * @param kategorije ispisuje sve kategorije i trazi odabir
      * @param brojOglasa trayi korisnika da unese broj aktivnih oglasa
      */
@@ -190,7 +194,7 @@ public class Glavna {
      * Uzime unesene podatke o automobilu i sprema ih u artikl
      *
      * @param unos trazi korisnika unos
-     * @param i generira redna mjesta artikla
+     * @param i    generira redna mjesta artikla
      * @return vraca podatke artikla
      */
     private static Artikl podaciArtiklaAutomobila(Scanner unos, int i) {
@@ -208,7 +212,7 @@ public class Glavna {
      * Uzima sve unesene podatke o uslugama i sprema ih u artikl
      *
      * @param unos trazi korisnika unos
-     * @param i generira redna mjesta artikla
+     * @param i    generira redna mjesta artikla
      * @return vraca podatke usluge
      */
     private static Artikl podaciArtiklaUsluge(Scanner unos, int i) {
@@ -224,7 +228,7 @@ public class Glavna {
      * Uzima podatke o kategoriji
      *
      * @param unos trazi korisnika unos
-     * @param i generira redna mjesta artikla
+     * @param i    generira redna mjesta artikla
      * @return vraca podatke kategorije
      */
     private static String podaciKategorije(Scanner unos, int i) {
@@ -244,7 +248,7 @@ public class Glavna {
      * Uzima sve podatke o privatnog korisnika i sprema u korisnike
      *
      * @param unos trazi korisnika unos
-     * @param i generira redna mjesta korisnika
+     * @param i    generira redna mjesta korisnika
      * @return vraca podatke privatnog korisnika
      */
     private static Korisnik podaciPrivatnogKorisnika(Scanner unos, int i) {
@@ -268,7 +272,7 @@ public class Glavna {
      * Uzima sve podatke o poslovnog korisnika i sprema u korisnike
      *
      * @param unos trazi korisnika unos
-     * @param i generira redna mjesta korisnika
+     * @param i    generira redna mjesta korisnika
      * @return vraca podatke poslovnog korisnika
      */
     private static Korisnik podaciPoslovnogKorisnika(Scanner unos, int i) {
