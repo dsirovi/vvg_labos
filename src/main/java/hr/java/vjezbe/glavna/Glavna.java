@@ -1,6 +1,7 @@
 package hr.java.vjezbe.glavna;
 
 import hr.java.vjezbe.entitet.*;
+import hr.java.vjezbe.iznimke.NeispravnaUslugaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +18,7 @@ public class Glavna {
 
     private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NeispravnaUslugaException {
 
         logger.info("App started    !!!!");
         Scanner unos = new Scanner(System.in);
@@ -51,11 +52,11 @@ public class Glavna {
                 if (odabraniOglas == 1) {
                     Artikl artikl = podaciArtiklaUsluge(unos, j);
                     artikli[j] = artikl;
+                    provjeraNazivaUsluge(unos, i);
                 } else {
                     Artikl artikl = podaciArtiklaAutomobila(unos, j);
                     artikli[j] = artikl;
                 }
-
             }
 
             kategorije[i] = new Kategorija(nazivKategorije, artikli);
@@ -65,6 +66,17 @@ public class Glavna {
         int brojOglasa = unos.nextInt();
         unos.nextLine();
         obaviObjavuAtrikala(unos, korisnici, kategorije, brojOglasa);
+    }
+
+    private static Artikl provjeraNazivaUsluge(Scanner unos, int i) throws NeispravnaUslugaException {
+        boolean petlja = false;
+        do {
+
+                if (podaciArtiklaUsluge(unos, i).getNaslov() == podaciArtiklaAutomobila(unos, i).getNaslov()){
+                    throw new NeispravnaUslugaException("Unesite novi naziv usluge");
+            }
+        }while (petlja);
+        return podaciArtiklaUsluge(unos, i);
     }
 
     /**
@@ -174,8 +186,7 @@ public class Glavna {
      * @return vraca korisnicki unos
      */
     private static int dohvatiOdabir(Scanner unos) {
-        int broj = unosBroja(unos, "Odabir -> ");
-        return broj;
+        return unosBroja(unos, "Odabir -> ");
     }
 
     /**
@@ -199,7 +210,6 @@ public class Glavna {
         System.out.print("Unesite opis " + (i + 1) + ". oglasa automobila -> ");
         String opis = unos.nextLine();
         BigDecimal snagaKs = BigDecimal.valueOf(unosBroja(unos, "Unesite snagu " + (i + 1) + ". u (Ks) oglasa automobila -> "));
-        System.out.print("Unesite cijenu " + (i + 1) + ". oglasa automobila -> ");
         BigDecimal cijena = BigDecimal.valueOf(unosBroja(unos, "Unesite cijenu " + (i + 1) + ". oglasa automobila -> "));
         return new Automobil(naslov, opis, cijena, snagaKs);
     }
