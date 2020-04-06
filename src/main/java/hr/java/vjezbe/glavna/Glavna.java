@@ -17,7 +17,7 @@ public class Glavna {
 
     private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
 
-    public static void main(String[] args) throws NemoguceOdreditiGrupuOsiguranjaException {
+    public static void main(String[] args) {
 
         logger.info("App started    !!!!");
         Scanner unos = new Scanner(System.in);
@@ -52,14 +52,9 @@ public class Glavna {
                     Artikl artikl = podaciArtiklaUsluge(unos, j);
                     artikli[j] = artikl;
                 } else {
-                    try {
                         Artikl artikl = podaciArtiklaAutomobila(unos, j);
                         artikli[j] = artikl;
-                    } catch (InputMismatchException | ArithmeticException e) {
-                        throw new NemoguceOdreditiGrupuOsiguranjaException(e.getMessage());
-                    }
                 }
-
             }
 
             kategorije[i] = new Kategorija(nazivKategorije, artikli);
@@ -203,7 +198,6 @@ public class Glavna {
         System.out.print("Unesite opis " + (i + 1) + ". oglasa automobila -> ");
         String opis = unos.nextLine();
         BigDecimal snagaKs = BigDecimal.valueOf(unosBroja(unos, "Unesite snagu " + (i + 1) + ". u (Ks) oglasa automobila -> "));
-        System.out.print("Unesite cijenu " + (i + 1) + ". oglasa automobila -> ");
         BigDecimal cijena = BigDecimal.valueOf(unosBroja(unos, "Unesite cijenu " + (i + 1) + ". oglasa automobila -> "));
         return new Automobil(naslov, opis, cijena, snagaKs);
     }
