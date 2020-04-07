@@ -236,8 +236,7 @@ public class Glavna {
         int kvadratura = unosBroja(unos, "Unesite kvadraturu " + (i + 1) + ". nekretnine -> ");
         BigDecimal cijena = BigDecimal.valueOf(unosBroja(unos, "Unesite cijenu " + (i + 1) + ". nekretnine -> "));
         Stanje stanje = odabirStanja(unos);
-        return new Stan(naslov, opis, cijena, kvadratura, stanje
-        );
+        return new Stan(naslov, opis, cijena, kvadratura, stanje);
     }
 
     /**
@@ -253,8 +252,7 @@ public class Glavna {
         System.out.print("Unesite opis " + (i + 1) + ". oglasa usluge -> ");
         String opis = unos.nextLine();
         BigDecimal cijena = BigDecimal.valueOf(unosBroja(unos, "Unesite cijenu " + (i + 1) + ". oglasa usluge -> "));
-        Stanje stanje = odabirStanja(unos);
-        return new Usluga(naslov, opis, cijena, stanje);
+        return new Usluga(naslov, opis, cijena);
     }
 
     /**
