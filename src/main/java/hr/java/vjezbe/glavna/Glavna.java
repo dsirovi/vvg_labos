@@ -1,14 +1,12 @@
 package hr.java.vjezbe.glavna;
 
 import hr.java.vjezbe.entitet.*;
-import hr.java.vjezbe.iznimke.NemoguceOdreditiGrupuOsiguranjaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Sluzi za ispis aktivnih oglasa
@@ -24,40 +22,41 @@ public class Glavna {
 
         int brojKorisnika = unosBroja(unos, "Unesite koliko korisnika zelite imati: ");
 
-        Korisnik[] korisnici = new Korisnik[brojKorisnika];
+        List<Korisnik> korisnici = new ArrayList<>();
         for (int i = 0; i < brojKorisnika; i++) {
             System.out.println("Unesite tip " + (i + 1) + ". korisnika -> ");
             tipoviKorisnika();
             int odabraniKorisnik = dohvatiOdabir(unos);
             if (odabraniKorisnik == 1) {
-                korisnici[i] = podaciPrivatnogKorisnika(unos, i);
+                korisnici.add(podaciPrivatnogKorisnika(unos, i));
             } else {
-                korisnici[i] = podaciPoslovnogKorisnika(unos, i);
+                korisnici.add(podaciPoslovnogKorisnika(unos, i));
             }
         }
 
         int brojKategorija = unosBroja(unos, "Unesite broj kategorija koliko zelite imati: ");
 
-        Kategorija[] kategorije = new Kategorija[brojKategorija];
-
+        List<Kategorija> kategorije = new ArrayList<>();
         for (int i = 0; i < brojKategorija; i++) {
             String nazivKategorije = podaciKategorije(unos, i);
             int brojArtikala = unosBroja(unos, "Unesite broj atikala koliko zelite u kategoriji: ");
-            Artikl[] artikli = new Artikl[brojArtikala];
+            Set<Artikl> artikli = new HashSet<>();
             for (int j = 0; j < brojArtikala; j++) {
                 System.out.println("Unesite tip " + (j + 1) + ". oglasa");
                 tipoviOglasa();
                 int odabraniOglas = dohvatiOdabir(unos);
                 if (odabraniOglas == 1) {
-                    Artikl artikl = podaciArtiklaUsluge(unos, j);
-                    artikli[j] = artikl;
-                } else {
-                        Artikl artikl = podaciArtiklaAutomobila(unos, j);
-                        artikli[j] = artikl;
+                    artikli.add(podaciArtiklaUsluge(unos, j));
+                } else if (odabraniOglas == 2){
+                    artikli.add(podaciArtiklaAutomobila(unos, j));
+                }else {
+                    artikli.add(podaciArtiklaStana(unos, j));
                 }
             }
 
-            kategorije[i] = new Kategorija(nazivKategorije, artikli);
+
+            Kategorija novaKategorija = new Kategorija(nazivKategorije, artikli);
+            kategorije.add(novaKategorija);
         }
 
         System.out.print("Unesite broj artikala koji su aktivno na prodaju: ");
@@ -65,6 +64,24 @@ public class Glavna {
         unos.nextLine();
         obaviObjavuAtrikala(unos, korisnici, kategorije, brojOglasa);
     }
+
+
+    private static Stanje odabirStanja(Scanner unos) {
+        for (int i = 0; i < Stanje.values().length; i++) {
+            System.out.println((i + 1) + ". " + Stanje.values()[i]);
+        }
+        Integer stanjeRedniBroj = null;
+        while (true) {
+            stanjeRedniBroj = dohvatiOdabir(unos);
+            if (stanjeRedniBroj >= 1 && stanjeRedniBroj <= Stanje.values().length) {
+                return Stanje.values()[stanjeRedniBroj - 1];
+            } else {
+                System.out.println("Neispravan unos!");
+            }
+
+        }
+    }
+
 
     /**
      * Provjera dali su uneseni brojevi
@@ -100,26 +117,27 @@ public class Glavna {
      * @param kategorije ispisuje sve kategorije i trazi odabir
      * @param brojOglasa trayi korisnika da unese broj aktivnih oglasa
      */
-    private static void obaviObjavuAtrikala(Scanner unos, Korisnik[] korisnici, Kategorija[] kategorije, int brojOglasa) {
-        Prodaja[] prodaje = new Prodaja[brojOglasa];
+    private static void obaviObjavuAtrikala(Scanner unos, List<Korisnik> korisnici, List<Kategorija> kategorije, int brojOglasa) {
+        List<Prodaja> prodaje = new ArrayList<>();
         for (int i = 0; i < brojOglasa; i++) {
             System.out.println("Odaberite korisnika: ");
             ispisiKorisnike(korisnici);
             int odabirKorisnika = dohvatiOdabir(unos);
-            Korisnik odabraniKorisnik = korisnici[odabirKorisnika - 1];
+            Korisnik odabraniKorisnik = korisnici.get(odabirKorisnika - 1);
 
             System.out.println("Odaberi kategoriju: ");
             ispisiKategoije(kategorije);
             int odabirKategorije = dohvatiOdabir(unos);
-            Kategorija odabranaKategorija = kategorije[odabirKategorije - 1];
+            Kategorija odabranaKategorija = kategorije.get(odabirKategorije - 1);
+
 
             System.out.println("Odaberi artikl: ");
-            ispisiArtikle(odabranaKategorija.getArtikli());
+            Map<Integer, Artikl> mapaArtikla =  ispisiArtikle(odabranaKategorija.getArtikli());
             int odabirArtikla = dohvatiOdabir(unos);
-            Artikl odabraniArtikl = odabranaKategorija.getArtikli()[odabirArtikla - 1];
 
-            Prodaja prodaja = new Prodaja(odabraniArtikl, odabraniKorisnik, LocalDate.now());
-            prodaje[i] = prodaja;
+            Prodaja novaProdaja = new Prodaja(mapaArtikla.get(odabirArtikla), odabraniKorisnik, LocalDate.now());
+            prodaje.add(novaProdaja);
+
         }
 
         System.out.println("Trenutno su na prodaju: ");
@@ -135,11 +153,17 @@ public class Glavna {
      *
      * @param artikli ispisuje sve artikle
      */
-    private static void ispisiArtikle(Artikl[] artikli) {
-        for (int i = 1; i <= artikli.length; i++) {
-            Artikl artikl = artikli[i - 1];
-            System.out.println(i + " " + artikl.getNaslov());
+    private static Map<Integer, Artikl> ispisiArtikle(Set<Artikl> artikli) {
+            Iterator<Artikl> artikl = artikli.iterator();
+            Map<Integer, Artikl> artiklMap = new HashMap<>();
+            int i = 1;
+            while (artikl.hasNext()){
+                Artikl a = artikl.next();
+                System.out.println(i + a.getNaslov());
+                artiklMap.put(i, a);
+                i++;
         }
+            return artiklMap;
     }
 
     /**
@@ -147,9 +171,9 @@ public class Glavna {
      *
      * @param kategorije ispisuje sve kategorije
      */
-    private static void ispisiKategoije(Kategorija[] kategorije) {
-        for (int i = 1; i <= kategorije.length; i++) {
-            Kategorija kategorija = kategorije[i - 1];
+    private static void ispisiKategoije(List<Kategorija> kategorije) {
+        for (int i = 1; i <= kategorije.size(); i++) {
+            Kategorija kategorija = kategorije.get(i - 1);
             System.out.println(i + " " + kategorija.getNaziv());
         }
     }
@@ -159,9 +183,9 @@ public class Glavna {
      *
      * @param korisnici ispisuje sve korisnike
      */
-    private static void ispisiKorisnike(Korisnik[] korisnici) {
-        for (int i = 0; i < korisnici.length; i++) {
-            Korisnik korisnik = korisnici[i];
+    private static void ispisiKorisnike(List<Korisnik> korisnici) {
+        for (int i = 0; i < korisnici.size(); i++) {
+            Korisnik korisnik = korisnici.get(i);
             System.out.println((i + 1) + " " + korisnik.dohvatiKontakt());
         }
     }
@@ -183,6 +207,7 @@ public class Glavna {
     private static void tipoviOglasa() {
         System.out.println("1. Usluge");
         System.out.println("2. Automobil");
+        System.out.println("3. Stan");
     }
 
     /**
@@ -199,7 +224,19 @@ public class Glavna {
         String opis = unos.nextLine();
         BigDecimal snagaKs = BigDecimal.valueOf(unosBroja(unos, "Unesite snagu " + (i + 1) + ". u (Ks) oglasa automobila -> "));
         BigDecimal cijena = BigDecimal.valueOf(unosBroja(unos, "Unesite cijenu " + (i + 1) + ". oglasa automobila -> "));
-        return new Automobil(naslov, opis, cijena, snagaKs);
+        Stanje stanje = odabirStanja(unos);
+        return new Automobil(naslov, opis, cijena, snagaKs, stanje);
+    }
+    private static Artikl podaciArtiklaStana(Scanner unos, int i) {
+        System.out.print("Unesite naslov " + (i + 1) + ". oglasa nekretnine -> ");
+        String naslov = unos.nextLine();
+        System.out.print("Unesite opis " + (i + 1) + ". oglasa nekretnine -> ");
+        String opis = unos.nextLine();
+        int kvadratura = unosBroja(unos, "Unesite kvadraturu " + (i + 1) + ". nekretnine -> ");
+        BigDecimal cijena = BigDecimal.valueOf(unosBroja(unos, "Unesite cijenu " + (i + 1) + ". nekretnine -> "));
+        Stanje stanje = odabirStanja(unos);
+        return new Stan(naslov, opis, cijena, kvadratura, stanje
+        );
     }
 
     /**
@@ -215,7 +252,8 @@ public class Glavna {
         System.out.print("Unesite opis " + (i + 1) + ". oglasa usluge -> ");
         String opis = unos.nextLine();
         BigDecimal cijena = BigDecimal.valueOf(unosBroja(unos, "Unesite cijenu " + (i + 1) + ". oglasa usluge -> "));
-        return new Usluga(naslov, opis, cijena);
+        Stanje stanje = odabirStanja(unos);
+        return new Usluga(naslov, opis, cijena, stanje);
     }
 
     /**
@@ -254,12 +292,7 @@ public class Glavna {
         String email = unos.nextLine();
         System.out.print("Unesite telefon " + (i + 1) + ". osobe -> ");
         String telefon = unos.nextLine();
-        return new Korisnik(email, telefon) {
-            @Override
-            public String dohvatiKontakt() {
-                return String.format("Osobni podaci prodavatelja: %s, email: %s, tel: %s", ime + " " + prezime, getEmail(), getTelefon());
-            }
-        };
+        return new PrivatniKorisnik(email, telefon, ime, prezime);
     }
 
     /**
@@ -278,11 +311,6 @@ public class Glavna {
         String web = unos.nextLine();
         System.out.print("Unesite telefon " + (i + 1) + ". tvrtke -> ");
         String telefon = unos.nextLine();
-        return new Korisnik(email, telefon) {
-            @Override
-            public String dohvatiKontakt() {
-                return String.format("Naziv tvrtke: %s, email: %s, web: %s, tel: %s", naziv, getEmail(), web, getTelefon());
-            }
-        };
+        return new PoslovniKorisnik(email, telefon, naziv, web);
     }
 }

@@ -1,13 +1,15 @@
 package hr.java.vjezbe.entitet;
 
+import java.util.Set;
+
 /**
  * podatke o nazivu i artiklima sprema u kategorije
  */
 public class Kategorija {
     private String naziv;
-    private Artikl[] artikli;
+    private Set<Artikl> artikli;
 
-    public Kategorija(String naziv, Artikl[] artikli) {
+    public Kategorija(String naziv, Set<Artikl> artikli) {
         this.naziv = naziv;
         this.artikli = artikli;
     }
@@ -20,11 +22,11 @@ public class Kategorija {
         this.naziv = naziv;
     }
 
-    public Artikl[] getArtikli() {
+    public Set<Artikl> getArtikli() {
         return artikli;
     }
 
-    public void setArtikli(Artikl[] artikli) {
+    public void setArtikli(Set<Artikl> artikli) {
         this.artikli = artikli;
     }
 }

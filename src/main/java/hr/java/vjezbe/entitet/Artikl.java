@@ -1,6 +1,7 @@
 package hr.java.vjezbe.entitet;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Podatke arikla posljeduje u tekst oglasa
@@ -9,11 +10,29 @@ public abstract class Artikl {
     private String naslov;
     private String opis;
     private BigDecimal cijena;
+    private Stanje stanje;
 
-    public Artikl(String naslov, String opis, BigDecimal cijena) {
+    public Artikl(String naslov, String opis, BigDecimal cijena, Stanje stanje) {
         this.naslov = naslov;
         this.opis = opis;
         this.cijena = cijena;
+        this.stanje = stanje;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Artikl artikl = (Artikl) o;
+        return naslov.equals(artikl.naslov) &&
+                opis.equals(artikl.opis) &&
+                cijena.equals(artikl.cijena) &&
+                stanje == artikl.stanje;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(naslov, opis, cijena, stanje);
     }
 
     public String getNaslov() {
@@ -41,4 +60,12 @@ public abstract class Artikl {
     }
 
     public abstract String tekstOglasa() throws Exception;
+
+    public Stanje getStanje() {
+        return stanje;
+    }
+
+    public void setStanje(Stanje stanje) {
+        this.stanje = stanje;
+    }
 }

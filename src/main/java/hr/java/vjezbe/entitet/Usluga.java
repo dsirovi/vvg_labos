@@ -6,8 +6,8 @@ import java.math.BigDecimal;
  * Extenda klasu artikl i ispisuje tekst oglasa
  */
 public class Usluga extends Artikl {
-    public Usluga(String naslov, String opis, BigDecimal cijena) {
-        super(naslov, opis, cijena);
+    public Usluga(String naslov, String opis, BigDecimal cijena, Stanje stanje) {
+        super(naslov, opis, cijena, stanje);
     }
 
     @Override
