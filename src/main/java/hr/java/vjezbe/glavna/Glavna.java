@@ -1,6 +1,7 @@
 package hr.java.vjezbe.glavna;
 
 import hr.java.vjezbe.entitet.*;
+import hr.java.vjezbe.sortiranje.ArtiklSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,7 @@ import java.util.*;
  */
 public class Glavna {
 
-    private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
+    public static final Logger logger = LoggerFactory.getLogger(Glavna.class);
 
     public static void main(String[] args) {
 
@@ -37,6 +38,7 @@ public class Glavna {
         int brojKategorija = unosBroja(unos, "Unesite broj kategorija koliko zelite imati: ");
 
         List<Kategorija> kategorije = new ArrayList<>();
+        Map<Kategorija, List<Artikl>> mapaKategorija = new HashMap<>();
         for (int i = 0; i < brojKategorija; i++) {
             String nazivKategorije = podaciKategorije(unos, i);
             int brojArtikala = unosBroja(unos, "Unesite broj atikala koliko zelite u kategoriji: ");
@@ -47,16 +49,16 @@ public class Glavna {
                 int odabraniOglas = dohvatiOdabir(unos);
                 if (odabraniOglas == 1) {
                     artikli.add(podaciArtiklaUsluge(unos, j));
-                } else if (odabraniOglas == 2){
+                } else if (odabraniOglas == 2) {
                     artikli.add(podaciArtiklaAutomobila(unos, j));
-                }else {
+                } else {
                     artikli.add(podaciArtiklaStana(unos, j));
                 }
             }
 
-
             Kategorija novaKategorija = new Kategorija(nazivKategorije, artikli);
             kategorije.add(novaKategorija);
+            mapaKategorija.put(novaKategorija, new ArrayList<>(artikli));
         }
 
         System.out.print("Unesite broj artikala koji su aktivno na prodaju: ");
@@ -70,7 +72,7 @@ public class Glavna {
         for (int i = 0; i < Stanje.values().length; i++) {
             System.out.println((i + 1) + ". " + Stanje.values()[i]);
         }
-        Integer stanjeRedniBroj = null;
+        int stanjeRedniBroj;
         while (true) {
             stanjeRedniBroj = dohvatiOdabir(unos);
             if (stanjeRedniBroj >= 1 && stanjeRedniBroj <= Stanje.values().length) {
@@ -132,10 +134,10 @@ public class Glavna {
 
 
             System.out.println("Odaberi artikl: ");
-            Map<Integer, Artikl> mapaArtikla =  ispisiArtikle(odabranaKategorija.getArtikli());
+            List<Artikl> sortiraniArtikli = ispisiArtikle(odabranaKategorija.getArtikli());
             int odabirArtikla = dohvatiOdabir(unos);
 
-            Prodaja novaProdaja = new Prodaja(mapaArtikla.get(odabirArtikla), odabraniKorisnik, LocalDate.now());
+            Prodaja novaProdaja = new Prodaja(sortiraniArtikli.get(odabirArtikla - 1), odabraniKorisnik, LocalDate.now());
             prodaje.add(novaProdaja);
 
         }
@@ -152,18 +154,16 @@ public class Glavna {
      * Ispisi artikle
      *
      * @param artikli ispisuje sve artikle
+     * @return
      */
-    private static Map<Integer, Artikl> ispisiArtikle(Set<Artikl> artikli) {
-            Iterator<Artikl> artikl = artikli.iterator();
-            Map<Integer, Artikl> artiklMap = new HashMap<>();
-            int i = 1;
-            while (artikl.hasNext()){
-                Artikl a = artikl.next();
-                System.out.println(i + a.getNaslov());
-                artiklMap.put(i, a);
-                i++;
+    private static List<Artikl> ispisiArtikle(Set<Artikl> artikli) {
+        List<Artikl> sortiraniArtikli = new ArrayList<>(artikli);
+        sortiraniArtikli.sort(new ArtiklSorter());
+        for (int i = 0; i < sortiraniArtikli.size(); i++) {
+            Artikl artikl = sortiraniArtikli.get(i);
+            System.out.println((i + 1) + ". " + artikl.getNaslov());
         }
-            return artiklMap;
+        return sortiraniArtikli;
     }
 
     /**
@@ -227,6 +227,7 @@ public class Glavna {
         Stanje stanje = odabirStanja(unos);
         return new Automobil(naslov, opis, cijena, snagaKs, stanje);
     }
+
     private static Artikl podaciArtiklaStana(Scanner unos, int i) {
         System.out.print("Unesite naslov " + (i + 1) + ". oglasa nekretnine -> ");
         String naslov = unos.nextLine();

@@ -59,7 +59,7 @@ public abstract class Artikl {
         this.cijena = cijena;
     }
 
-    public abstract String tekstOglasa() throws Exception;
+    public abstract String tekstOglasa();
 
     public Stanje getStanje() {
         return stanje;

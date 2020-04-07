@@ -1,6 +1,7 @@
 package hr.java.vjezbe.entitet;
 
-import hr.java.vjezbe.iznimke.CijenaJePreniskaException;
+import hr.java.vjezbe.glavna.Glavna;
+import hr.java.vjezbe.iznimke.NemoguceOdreditiGrupuOsiguranjaException;
 
 import java.math.BigDecimal;
 
@@ -32,7 +33,7 @@ public class Automobil extends Artikl implements Vozilo {
     }
 
     @Override
-    public BigDecimal izracunajGrupuOsiguranja() throws CijenaJePreniskaException {
+    public BigDecimal izracunajGrupuOsiguranja() throws NemoguceOdreditiGrupuOsiguranjaException {
         int grupa;
         if (snagaKs.compareTo(GRANICA_PRVE_KATEGORIJE) <= 0) {
             grupa = 1;
@@ -45,14 +46,28 @@ public class Automobil extends Artikl implements Vozilo {
         } else if (snagaKs.compareTo(GRANICA_PETE_KATEGORIJE) <= 0){
             grupa = 5;
         }else {
-            throw new CijenaJePreniskaException();
+            throw new NemoguceOdreditiGrupuOsiguranjaException();
         }
         return BigDecimal.valueOf(grupa);
     }
 
     @Override
-    public String tekstOglasa() throws Exception {
-        BigDecimal maxSnaga = snagaKs;
-        return String.format("Naslov automobila: %s \nStanje automobila: %s \nOpis automobila: %s \nSnaga automobila: %s \nIzracun osiguranja automobila: %s \nCijena automobila: %s", getNaslov(), getStanje(), getOpis(), izracunajKw(snagaKs), izracunajCijenuOsiguranja(), getCijena());
+    public String tekstOglasa() {
+        String tekstIzracunaOsiguranja;
+        try {
+            tekstIzracunaOsiguranja = izracunajCijenuOsiguranja().toString();
+        }catch (NemoguceOdreditiGrupuOsiguranjaException e){
+            Glavna.logger.error(e.getMessage(), e);
+            tekstIzracunaOsiguranja = e.getMessage();
+        }
+        return String.format(
+                "Naslov automobila: %s \nStanje automobila: %s \nOpis automobila: %s \nSnaga automobila: %s \nIzracun osiguranja automobila: %s \nCijena automobila: %s",
+                getNaslov(),
+                getStanje(),
+                getOpis(),
+                izracunajKw(snagaKs),
+                tekstIzracunaOsiguranja,
+                getCijena()
+        );
     }
 }

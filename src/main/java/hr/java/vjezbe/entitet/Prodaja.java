@@ -53,15 +53,10 @@ public class Prodaja {
 
     @Override
     public String toString() {
-        try {
             return getArtikl().tekstOglasa() +
                     "\n" +
                     "Datum objave: " + getDatumObjave().format(MOJ_FORMAT) +
                     "\n" +
                     getKorisnik().dohvatiKontakt();
-        } catch (Exception e) {
-            logger.error("Dogodila se greska", e);
-        }
-        return toString();
     }
 }

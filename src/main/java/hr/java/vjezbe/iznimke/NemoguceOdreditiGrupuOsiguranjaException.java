@@ -1,12 +1,13 @@
 package hr.java.vjezbe.iznimke;
 
-public class NemoguceOdreditiGrupuOsiguranjaException extends Exception {
+import java.io.Serializable;
 
-    private static final long serialVersionUID = -2291535264076831445L;
+public class NemoguceOdreditiGrupuOsiguranjaException extends Exception implements Serializable {
 
+    private static final long serialVersionUID = -8951018113490159724L;
 
     public NemoguceOdreditiGrupuOsiguranjaException() {
-        super("Dogodila se greska!!!");
+        super("Previse kW za odrediti grupu osiguranja");
     }
 
     public NemoguceOdreditiGrupuOsiguranjaException(String message) {

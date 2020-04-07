@@ -1,5 +1,7 @@
 package hr.java.vjezbe.entitet;
 
+import hr.java.vjezbe.iznimke.NemoguceOdreditiGrupuOsiguranjaException;
+
 import java.math.BigDecimal;
 
 /**
@@ -19,9 +21,9 @@ public interface Vozilo {
         return horsePower.multiply(new BigDecimal(KILOWATTS));
     }
 
-    BigDecimal izracunajGrupuOsiguranja() throws Exception;
+    BigDecimal izracunajGrupuOsiguranja() throws NemoguceOdreditiGrupuOsiguranjaException;
 
-    default BigDecimal izracunajCijenuOsiguranja() throws Exception {
+    default BigDecimal izracunajCijenuOsiguranja() throws NemoguceOdreditiGrupuOsiguranjaException {
         BigDecimal grupa = izracunajGrupuOsiguranja();
 
         int cijena = 0;
