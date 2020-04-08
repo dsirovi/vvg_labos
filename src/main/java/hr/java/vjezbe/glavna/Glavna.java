@@ -103,7 +103,8 @@ public class Glavna {
                 unos.nextLine();
                 petlja = false;
             } catch (InputMismatchException | ArithmeticException e) {
-                logger.error("Molim vas unesite brojacane vrijednosti");
+                System.out.println("Molim vas unesite brojacane vrijednosti");
+                logger.error("Molim vas unesite brojacane vrijednosti", e);
                 unos.nextLine();
                 petlja = true;
             }
