@@ -33,7 +33,7 @@ public class Stan extends Artikl implements Nekretnina {
        return String.format(
                "Naslov nakretnine: %s \nStanje nekretnine: %s \nOpis nekretnine: %s \nSKvadratura nekretnine: %s \nCijena nekretnine: %s \nPorez nekretnine: %s",
                getNaslov(),
-               getStanje(),
+               getStanje().toString().toLowerCase(),
                getOpis(),
                kvadratura,
                getCijena(),

@@ -42,10 +42,10 @@ public class Glavna {
         for (int i = 0; i < brojKategorija; i++) {
             String nazivKategorije = podaciKategorije(unos, i);
             int brojArtikala = unosBroja(unos, "Unesite broj atikala koliko zelite u kategoriji: ");
-            Set<Artikl> artikli = new HashSet<>();
+            List<Artikl> artikli = new ArrayList<>();
             for (int j = 0; j < brojArtikala; j++) {
                 System.out.println("Unesite tip " + (j + 1) + ". oglasa");
-                tipoviOglasa();
+                tipOglasa();
                 int odabraniOglas = dohvatiOdabir(unos);
                 if (odabraniOglas == 1) {
                     artikli.add(podaciArtiklaUsluge(unos, j));
@@ -59,18 +59,20 @@ public class Glavna {
             Kategorija novaKategorija = new Kategorija(nazivKategorije, artikli);
             kategorije.add(novaKategorija);
             mapaKategorija.put(novaKategorija, new ArrayList<>(artikli));
+
         }
 
-        System.out.print("Unesite broj artikala koji su aktivno na prodaju: ");
-        int brojOglasa = unos.nextInt();
-        unos.nextLine();
+        int brojOglasa = unosBroja(unos, "Unesite broj artikala koji su aktivno na prodaju: ");
         obaviObjavuAtrikala(unos, korisnici, kategorije, brojOglasa);
+        System.out.println(mapaKategorija);
+//        for (Map.Entry<Kategorija, List<Artikl>> entry : mapaKategorija.entrySet()){
+//            System.out.println(entry.getKey() + ":" + entry.getValue().toString());
     }
 
 
     private static Stanje odabirStanja(Scanner unos) {
         for (int i = 0; i < Stanje.values().length; i++) {
-            System.out.println((i + 1) + ". " + Stanje.values()[i]);
+            System.out.println((i + 1) + ". " + Stanje.values()[i].toString().toLowerCase());
         }
         int stanjeRedniBroj;
         while (true) {
@@ -82,6 +84,13 @@ public class Glavna {
             }
 
         }
+    }
+
+    private static void tipOglasa() {
+        for (int i = 0; i < TipOglasa.values().length; i++) {
+            System.out.println((i + 1) + ". " + TipOglasa.values()[i].toString().toLowerCase());
+        }
+
     }
 
 
@@ -157,7 +166,7 @@ public class Glavna {
      * @param artikli ispisuje sve artikle
      * @return
      */
-    private static List<Artikl> ispisiArtikle(Set<Artikl> artikli) {
+    private static List<Artikl> ispisiArtikle(List<Artikl> artikli) {
         List<Artikl> sortiraniArtikli = new ArrayList<>(artikli);
         sortiraniArtikli.sort(new ArtiklSorter());
         for (int i = 0; i < sortiraniArtikli.size(); i++) {
@@ -200,15 +209,6 @@ public class Glavna {
     private static int dohvatiOdabir(Scanner unos) {
         int broj = unosBroja(unos, "Odabir -> ");
         return broj;
-    }
-
-    /**
-     * Ispiuje sve tipove oglasa
-     */
-    private static void tipoviOglasa() {
-        System.out.println("1. Usluge");
-        System.out.println("2. Automobil");
-        System.out.println("3. Stan");
     }
 
     /**
@@ -272,8 +272,9 @@ public class Glavna {
      * Ispisuje sve tipove korisnika
      */
     private static void tipoviKorisnika() {
-        System.out.println("1. Privatni");
-        System.out.println("2. Poslovni");
+        for (int i = 0; i < TipKorisnika.values().length; i++) {
+            System.out.println((i + 1) + ". " + TipKorisnika.values()[i].toString().toLowerCase());
+        }
     }
 
     /**

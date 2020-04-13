@@ -1,17 +1,17 @@
 package hr.java.vjezbe.entitet;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * podatke o nazivu i artiklima sprema u kategorije
  */
-public class Kategorija {
+public class Kategorija<T> {
     private String naziv;
-    private Set<Artikl> artikli;
+    private List<Artikl> artikli;
 
 
-    public Kategorija(String naziv, Set<Artikl> artikli) {
+    public Kategorija(String naziv, List<Artikl> artikli) {
         this.naziv = naziv;
         this.artikli = artikli;
     }
@@ -24,11 +24,11 @@ public class Kategorija {
         this.naziv = naziv;
     }
 
-    public Set<Artikl> getArtikli() {
+    public List<Artikl> getArtikli() {
         return artikli;
     }
 
-    public void setArtikli(Set<Artikl> artikli) {
+    public void setArtikli(List<Artikl> artikli) {
         this.artikli = artikli;
     }
 

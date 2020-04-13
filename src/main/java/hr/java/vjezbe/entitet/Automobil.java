@@ -63,7 +63,7 @@ public class Automobil extends Artikl implements Vozilo {
         return String.format(
                 "Naslov automobila: %s \nStanje automobila: %s \nOpis automobila: %s \nSnaga automobila: %s \nIzracun osiguranja automobila: %s \nCijena automobila: %s",
                 getNaslov(),
-                getStanje(),
+                getStanje().toString().toLowerCase(),
                 getOpis(),
                 izracunajKw(snagaKs),
                 tekstIzracunaOsiguranja,
