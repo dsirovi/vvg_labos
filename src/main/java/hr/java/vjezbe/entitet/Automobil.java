@@ -61,10 +61,10 @@ public class Automobil extends Artikl implements Vozilo {
             tekstIzracunaOsiguranja = e.getMessage();
         }
         return String.format(
-                "Naslov automobila: %s \nStanje automobila: %s \nOpis automobila: %s \nSnaga automobila: %s \nIzracun osiguranja automobila: %s \nCijena automobila: %s",
+                "Naslov automobila: %s \nOpis automobila: %s \nStanje automobila: %s \nSnaga automobila: %s \nIzracun osiguranja automobila: %s \nCijena automobila: %s",
                 getNaslov(),
-                getStanje().toString().toLowerCase(),
                 getOpis(),
+                getStanje().toString().toLowerCase(),
                 izracunajKw(snagaKs),
                 tekstIzracunaOsiguranja,
                 getCijena()

@@ -6,12 +6,11 @@ import java.util.Objects;
 /**
  * podatke o nazivu i artiklima sprema u kategorije
  */
-public class Kategorija<T> {
+public class Kategorija<T extends Artikl> {
     private String naziv;
-    private List<Artikl> artikli;
+    private List<T> artikli;
 
-
-    public Kategorija(String naziv, List<Artikl> artikli) {
+    public Kategorija(String naziv, List<T> artikli) {
         this.naziv = naziv;
         this.artikli = artikli;
     }
@@ -24,11 +23,11 @@ public class Kategorija<T> {
         this.naziv = naziv;
     }
 
-    public List<Artikl> getArtikli() {
+    public List<T> getArtikli() {
         return artikli;
     }
 
-    public void setArtikli(List<Artikl> artikli) {
+    public void setArtikli(List<T> artikli) {
         this.artikli = artikli;
     }
 

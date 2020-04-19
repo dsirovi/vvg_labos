@@ -59,15 +59,38 @@ public class Glavna {
             Kategorija novaKategorija = new Kategorija(nazivKategorije, artikli);
             kategorije.add(novaKategorija);
             mapaKategorija.put(novaKategorija, new ArrayList<>(artikli));
-
         }
 
         int brojOglasa = unosBroja(unos, "Unesite broj artikala koji su aktivno na prodaju: ");
         obaviObjavuAtrikala(unos, korisnici, kategorije, brojOglasa);
-        System.out.println(mapaKategorija);
-//        for (Map.Entry<Kategorija, List<Artikl>> entry : mapaKategorija.entrySet()){
-//            System.out.println(entry.getKey() + ":" + entry.getValue().toString());
+        System.out.println("Ispis po kategorijama: ");
+        ispisKategorija(mapaKategorija);
     }
+
+    private static void ispisKategorija(Map<Kategorija, List<Artikl>> mapaKategorija) {
+        mapaKategorija.entrySet()
+                .forEach(kategorijaListEntry -> {
+                    System.out.println("-------------------------------------------------------------------------------- ");
+                    System.out.println("Kategorija: " + kategorijaListEntry.getKey().getNaziv());
+                    System.out.println("-------------------------------------------------------------------------------- ");
+                    kategorijaListEntry.getValue()
+                            .forEach(artikl -> {
+                        System.out.println(artikl.tekstOglasa());
+                        System.out.println("-------------------------------------------------------------------------------- ");
+                    });
+                }
+                );
+//        for (Map.Entry<Kategorija, List<Artikl>> entry : mapaKategorija.entrySet()) {
+//            System.out.println(entry.getKey().getNaziv() + ":");
+//            System.out.println("-------------------------------------------------------------------------------- ");
+//            for (Artikl artikl : entry.getValue()) {
+//                System.out.println(artikl.tekstOglasa());
+//                System.out.println("-------------------------------------------------------------------------------- ");
+//            }
+//        }
+    }
+
+
 
 
     private static Stanje odabirStanja(Scanner unos) {
@@ -153,10 +176,10 @@ public class Glavna {
         }
 
         System.out.println("Trenutno su na prodaju: ");
-        System.out.println("_____________________________________________");
+        System.out.println("-------------------------------------------------------------------------------- ");
         for (Prodaja prodaja : prodaje) {
             System.out.println(prodaja);
-            System.out.println("_____________________________________________");
+            System.out.println("-------------------------------------------------------------------------------- ");
         }
     }
 

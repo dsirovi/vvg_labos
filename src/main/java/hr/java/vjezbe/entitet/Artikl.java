@@ -59,8 +59,6 @@ public abstract class Artikl {
         this.cijena = cijena;
     }
 
-    public abstract String tekstOglasa();
-
     public Stanje getStanje() {
         return stanje;
     }
@@ -68,4 +66,6 @@ public abstract class Artikl {
     public void setStanje(Stanje stanje) {
         this.stanje = stanje;
     }
+
+    public abstract String tekstOglasa();
 }
