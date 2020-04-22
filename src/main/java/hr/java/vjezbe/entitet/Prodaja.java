@@ -1,9 +1,6 @@
 package hr.java.vjezbe.entitet;
 
-import hr.java.vjezbe.glavna.Glavna;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -11,17 +8,26 @@ import java.time.format.DateTimeFormatter;
  * Sprema podatke artikla, korisnika i datum obajve te ispisuje tekst oglasa
  */
 
-public class Prodaja {
-
-    private static final Logger logger = LoggerFactory.getLogger(Glavna.class);
+public class Prodaja extends Entitet implements Serializable {
 
     private static final DateTimeFormatter MOJ_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+    private static final long serialVersionUID = 938329775386513542L;
+
+    private static long nextId = 1L;
 
     private Artikl artikl;
     private Korisnik korisnik;
     private LocalDate datumObjave;
 
+    public Prodaja(long id, Artikl artikl, Korisnik korisnik, LocalDate datumObjave) {
+        super(id);
+        this.artikl = artikl;
+        this.korisnik = korisnik;
+        this.datumObjave = datumObjave;
+    }
+
     public Prodaja(Artikl artikl, Korisnik korisnik, LocalDate datumObjave) {
+        super(nextId++);
         this.artikl = artikl;
         this.korisnik = korisnik;
         this.datumObjave = datumObjave;

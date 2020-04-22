@@ -1,7 +1,6 @@
 package hr.java.vjezbe.glavna;
 
 import hr.java.vjezbe.entitet.*;
-import hr.java.vjezbe.sortiranje.ArtiklSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +23,7 @@ public class Glavna {
         int brojKorisnika = unosBroja(unos, "Unesite koliko korisnika zelite imati: ");
 
         List<Korisnik> korisnici = new ArrayList<>();
+
         for (int i = 0; i < brojKorisnika; i++) {
             System.out.println("Unesite tip " + (i + 1) + ". korisnika -> ");
             tipoviKorisnika();
@@ -37,28 +37,29 @@ public class Glavna {
 
         int brojKategorija = unosBroja(unos, "Unesite broj kategorija koliko zelite imati: ");
 
-        List<Kategorija> kategorije = new ArrayList<>();
-        Map<Kategorija, List<Artikl>> mapaKategorija = new HashMap<>();
+        List<Kategorija<Artikl>> kategorije = new ArrayList<>();
+        Map<Kategorija<Artikl>, List<Artikl>> mapaKategorija = new HashMap<>();
+
         for (int i = 0; i < brojKategorija; i++) {
             String nazivKategorije = podaciKategorije(unos, i);
             int brojArtikala = unosBroja(unos, "Unesite broj atikala koliko zelite u kategoriji: ");
-            List<Artikl> artikli = new ArrayList<>();
+            Kategorija<Artikl> kategorija = new Kategorija<>(nazivKategorije);
+
             for (int j = 0; j < brojArtikala; j++) {
                 System.out.println("Unesite tip " + (j + 1) + ". oglasa");
                 tipOglasa();
                 int odabraniOglas = dohvatiOdabir(unos);
                 if (odabraniOglas == 1) {
-                    artikli.add(podaciArtiklaUsluge(unos, j));
+                    kategorija.dodajArtikl(podaciArtiklaUsluge(unos, j));
                 } else if (odabraniOglas == 2) {
-                    artikli.add(podaciArtiklaAutomobila(unos, j));
+                    kategorija.dodajArtikl(podaciArtiklaAutomobila(unos, j));
                 } else {
-                    artikli.add(podaciArtiklaStana(unos, j));
+                    kategorija.dodajArtikl(podaciArtiklaStana(unos, j));
                 }
             }
 
-            Kategorija novaKategorija = new Kategorija(nazivKategorije, artikli);
-            kategorije.add(novaKategorija);
-            mapaKategorija.put(novaKategorija, new ArrayList<>(artikli));
+            kategorije.add(kategorija);
+            mapaKategorija.put(kategorija, kategorija.getArtikli());
         }
 
         int brojOglasa = unosBroja(unos, "Unesite broj artikala koji su aktivno na prodaju: ");
@@ -67,18 +68,18 @@ public class Glavna {
         ispisKategorija(mapaKategorija);
     }
 
-    private static void ispisKategorija(Map<Kategorija, List<Artikl>> mapaKategorija) {
+    private static void ispisKategorija(Map<Kategorija<Artikl>, List<Artikl>> mapaKategorija) {
         mapaKategorija.entrySet()
                 .forEach(kategorijaListEntry -> {
-                    System.out.println("-------------------------------------------------------------------------------- ");
-                    System.out.println("Kategorija: " + kategorijaListEntry.getKey().getNaziv());
-                    System.out.println("-------------------------------------------------------------------------------- ");
-                    kategorijaListEntry.getValue()
-                            .forEach(artikl -> {
-                        System.out.println(artikl.tekstOglasa());
-                        System.out.println("-------------------------------------------------------------------------------- ");
-                    });
-                }
+                            System.out.println("-------------------------------------------------------------------------------- ");
+                            System.out.println("Kategorija: " + kategorijaListEntry.getKey().getNaziv());
+                            System.out.println("-------------------------------------------------------------------------------- ");
+                            kategorijaListEntry.getValue()
+                                    .forEach(artikl -> {
+                                        System.out.println(artikl.tekstOglasa());
+                                        System.out.println("-------------------------------------------------------------------------------- ");
+                                    });
+                        }
                 );
 //        for (Map.Entry<Kategorija, List<Artikl>> entry : mapaKategorija.entrySet()) {
 //            System.out.println(entry.getKey().getNaziv() + ":");
@@ -89,8 +90,6 @@ public class Glavna {
 //            }
 //        }
     }
-
-
 
 
     private static Stanje odabirStanja(Scanner unos) {
@@ -105,7 +104,6 @@ public class Glavna {
             } else {
                 System.out.println("Neispravan unos!");
             }
-
         }
     }
 
@@ -152,7 +150,7 @@ public class Glavna {
      * @param kategorije ispisuje sve kategorije i trazi odabir
      * @param brojOglasa trayi korisnika da unese broj aktivnih oglasa
      */
-    private static void obaviObjavuAtrikala(Scanner unos, List<Korisnik> korisnici, List<Kategorija> kategorije, int brojOglasa) {
+    private static void obaviObjavuAtrikala(Scanner unos, List<Korisnik> korisnici, List<Kategorija<Artikl>> kategorije, int brojOglasa) {
         List<Prodaja> prodaje = new ArrayList<>();
         for (int i = 0; i < brojOglasa; i++) {
             System.out.println("Odaberite korisnika: ");
@@ -163,7 +161,7 @@ public class Glavna {
             System.out.println("Odaberi kategoriju: ");
             ispisiKategoije(kategorije);
             int odabirKategorije = dohvatiOdabir(unos);
-            Kategorija odabranaKategorija = kategorije.get(odabirKategorije - 1);
+            Kategorija<Artikl> odabranaKategorija = kategorije.get(odabirKategorije - 1);
 
 
             System.out.println("Odaberi artikl: ");
@@ -191,7 +189,7 @@ public class Glavna {
      */
     private static List<Artikl> ispisiArtikle(List<Artikl> artikli) {
         List<Artikl> sortiraniArtikli = new ArrayList<>(artikli);
-        sortiraniArtikli.sort(new ArtiklSorter());
+        sortiraniArtikli.sort(Comparator.comparing(Artikl::getNaslov));
         for (int i = 0; i < sortiraniArtikli.size(); i++) {
             Artikl artikl = sortiraniArtikli.get(i);
             System.out.println((i + 1) + ". " + artikl.getNaslov());
@@ -204,9 +202,9 @@ public class Glavna {
      *
      * @param kategorije ispisuje sve kategorije
      */
-    private static void ispisiKategoije(List<Kategorija> kategorije) {
+    private static void ispisiKategoije(List<Kategorija<Artikl>> kategorije) {
         for (int i = 1; i <= kategorije.size(); i++) {
-            Kategorija kategorija = kategorije.get(i - 1);
+            Kategorija<Artikl> kategorija = kategorije.get(i - 1);
             System.out.println(i + " " + kategorija.getNaziv());
         }
     }
@@ -260,7 +258,7 @@ public class Glavna {
         int kvadratura = unosBroja(unos, "Unesite kvadraturu " + (i + 1) + ". nekretnine -> ");
         BigDecimal cijena = BigDecimal.valueOf(unosBroja(unos, "Unesite cijenu " + (i + 1) + ". nekretnine -> "));
         Stanje stanje = odabirStanja(unos);
-        return new Stan(naslov, opis, cijena, kvadratura, stanje);
+        return new Stan(naslov, opis, cijena, stanje, kvadratura);
     }
 
     /**

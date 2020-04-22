@@ -3,21 +3,29 @@ package hr.java.vjezbe.entitet;
 import hr.java.vjezbe.glavna.Glavna;
 import hr.java.vjezbe.iznimke.NemoguceOdreditiGrupuOsiguranjaException;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Prima podatke o vozilu i sprema ih automobil te prosljeduje u artikle
  * na osnovu konjskih snaga sprema u odredenu grupu osiguranja
  */
-public class Automobil extends Artikl implements Vozilo {
+public class Automobil extends Artikl implements Vozilo, Serializable {
 
     private static final BigDecimal GRANICA_PRVE_KATEGORIJE = BigDecimal.valueOf(105);
     private static final BigDecimal GRANICA_DRUGE_KATEGORIJE = BigDecimal.valueOf(140);
     private static final BigDecimal GRANICA_TRECE_KATEGORIJE = BigDecimal.valueOf(180);
     private static final BigDecimal GRANICA_CETVRTE_KATEGORIJE = BigDecimal.valueOf(250);
     private static final BigDecimal GRANICA_PETE_KATEGORIJE = BigDecimal.valueOf(300);
+    private static final long serialVersionUID = -6737819761612494475L;
 
     private BigDecimal snagaKs;
+
+    public Automobil(long id, String naslov, String opis, BigDecimal cijena, BigDecimal snagaKs, Stanje stanje) {
+        super(id, naslov, opis, cijena, stanje);
+        this.snagaKs = snagaKs;
+    }
 
     public Automobil(String naslov, String opis, BigDecimal cijena, BigDecimal snagaKs, Stanje stanje) {
         super(naslov, opis, cijena, stanje);
@@ -61,11 +69,11 @@ public class Automobil extends Artikl implements Vozilo {
             tekstIzracunaOsiguranja = e.getMessage();
         }
         return String.format(
-                "Naslov automobila: %s \nOpis automobila: %s \nStanje automobila: %s \nSnaga automobila: %s \nIzracun osiguranja automobila: %s \nCijena automobila: %s",
+                "Naslov automobila: %s \nOpis automobila: %s \nStanje automobila: %s \nSnaga automobila u kW: %s \nIzracun osiguranja automobila: %s \nCijena automobila: %s",
                 getNaslov(),
                 getOpis(),
                 getStanje().toString().toLowerCase(),
-                izracunajKw(snagaKs),
+                izracunajKw(snagaKs).setScale(2, RoundingMode.CEILING),
                 tekstIzracunaOsiguranja,
                 getCijena()
         );

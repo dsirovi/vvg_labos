@@ -1,10 +1,15 @@
 package hr.java.vjezbe.entitet;
 
+import java.io.Serializable;
+
 /**
  * Prima podatke o privatnim korisnicima
  */
 
-public class PrivatniKorisnik extends Korisnik {
+public class PrivatniKorisnik extends Korisnik implements Serializable {
+
+    private static final long serialVersionUID = 2861547898541255562L;
+
     private String ime;
     private String prezime;
 

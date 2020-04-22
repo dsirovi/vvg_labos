@@ -6,13 +6,25 @@ import java.util.Objects;
 /**
  * Podatke arikla posljeduje u tekst oglasa
  */
-public abstract class Artikl {
+public abstract class Artikl extends Entitet {
+
+    private static long nextId = 1L;
+
     private String naslov;
     private String opis;
     private BigDecimal cijena;
     private Stanje stanje;
 
+    public Artikl(long id, String naslov, String opis, BigDecimal cijena, Stanje stanje) {
+        super(id);
+        this.naslov = naslov;
+        this.opis = opis;
+        this.cijena = cijena;
+        this.stanje = stanje;
+    }
+
     public Artikl(String naslov, String opis, BigDecimal cijena, Stanje stanje) {
+        super(nextId++);
         this.naslov = naslov;
         this.opis = opis;
         this.cijena = cijena;

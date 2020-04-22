@@ -3,14 +3,23 @@ package hr.java.vjezbe.entitet;
 import hr.java.vjezbe.glavna.Glavna;
 import hr.java.vjezbe.iznimke.CijenaJePreniskaException;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Stan extends Artikl implements Nekretnina {
+public class Stan extends Artikl implements Nekretnina, Serializable {
+
+    private static final long serialVersionUID = 196354176215960634L;
+
     private int kvadratura;
 
-    public Stan(String naslov, String opis, BigDecimal cijena, int kavadratura, Stanje stanje) {
+    public Stan(long id, String naslov, String opis, BigDecimal cijena, Stanje stanje, int kvadratura) {
+        super(id, naslov, opis, cijena, stanje);
+        this.kvadratura = kvadratura;
+    }
+
+    public Stan(String naslov, String opis, BigDecimal cijena, Stanje stanje, int kvadratura) {
         super(naslov, opis, cijena, stanje);
-        this.kvadratura = kavadratura;
+        this.kvadratura = kvadratura;
     }
 
     public int getKavadratura() {
